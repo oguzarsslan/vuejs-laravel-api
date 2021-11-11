@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <div class="row">
+          <div class="row mt-5">
             <div class="offset-5 col-md-2">
               <div class="form">
                 <div class="mb-3">
@@ -29,19 +29,12 @@
         </div>
       </div>
     </div>
-
-
-    <!--    <br><br><br>-->
-    <!--    <hr>-->
-    <!--    <input type="email" v-model="user.email" placeholder="email">-->
-    <!--    <input type="password" v-model="user.password" placeholder="password">-->
-    <!--    <button class="btn btn-primary" @click="login">login</button>-->
   </div>
 </template>
 
 <script>
 export default {
-  name: "Login",
+  name: "Auth",
   data() {
     return {
       user: {
@@ -82,7 +75,6 @@ export default {
   border-style: solid;
   border-width: 1px;
   padding: 10px;
-  margin-top: 50px;
 }
 
 p {

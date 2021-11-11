@@ -1,17 +1,12 @@
 <template>
   <div>
-    <Header></Header>
+    <Header/>
 
-    <router-view></router-view>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import {mapActions} from "vuex";
-import {mapGetters} from "vuex";
-import Login from "./auth/Login";
-import Register from "./auth/Register";
 import Header from "./Header";
 
 export default {
@@ -23,8 +18,6 @@ export default {
     }
   },
   components: {
-    Login,
-    Register,
     Header
   },
   computed: {
