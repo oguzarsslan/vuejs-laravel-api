@@ -12,7 +12,7 @@ const routes = [
         //   } else {
         //     next()
         //   }
-        // }
+        // /}
     },
     {
         path: '/login',
