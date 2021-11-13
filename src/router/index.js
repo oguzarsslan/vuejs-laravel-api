@@ -12,7 +12,7 @@ const routes = [
         //   } else {
         //     next()
         //   }
-        // /}
+        // }
     },
     {
         path: '/login',
@@ -23,13 +23,13 @@ const routes = [
         path: '/users',
         name: 'Users',
         component: Users,
-        // beforeEnter(to, from, next) {
-        //   if (!localStorage.getItem('token')) {
-        //     next('/login')
-        //   } else {
-        //     next()
-        //   }
-        // }
+        beforeEnter(to, from, next) {
+          if (!localStorage.getItem('token')) {
+            next('/login')
+          } else {
+            next()
+          }
+        }
     }
 ]
 

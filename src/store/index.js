@@ -24,7 +24,7 @@ export default createStore({
             state.item = data;
         },
         setToken(state, data) {
-            state.token = data.data.token;
+            state.token = data.data.access_token;
         },
         clearToken(state) {
             state.token = ""
@@ -33,26 +33,28 @@ export default createStore({
     actions: {
         getDataFromServer({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/get')
+                // api.get('/get')
+                //     .then(response => {
+                //             commit('setData', response)
+                //             resolve(response)
+                //         }
+                //     )
+                //     .catch(function (error) {
+                //         console.log(error.message)
+                //     })
+                axios.get('http://127.0.0.1:8000/get', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
                     .then(response => {
                             commit('setData', response)
                             resolve(response)
                         }
                     )
                     .catch(function (error) {
-                        console.log(error.message)
+                        console.log(error)
                     })
-                // axios.get('http://127.0.0.1:8000/get', {
-                //   headers: {'Authorization': 'Bearer' + localStorage.getItem('token')},
-                // })
-                //   .then(response => {
-                //       commit('setData', response)
-                //       resolve(response)
-                //     }
-                //   )
-                //   .catch(function (error) {
-                //     console.log(error.message)
-                //   })
             })
         },
         setDataToServer({commit}, data) {
@@ -97,16 +99,17 @@ export default createStore({
                 //     headers: {'Content-Type': 'application/json'},
                 //     credentials: 'include'
                 // })
-                    let param = {
-                        email: user.email,
-                        password: user.password,
-                        headers: {'Content-Type': 'application/json'},
-                        credentials: 'include'
-                    }
-                    api.post('/login', param)
+                let param = {
+                    email: user.email,
+                    password: user.password,
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include'
+                }
+                api.post('/login', param)
                     .then(response => {
+                        console.log(response.data.access_token)
                         commit('setToken', response)
-                        localStorage.setItem("token", response.data.token)
+                        localStorage.setItem("token", response.data.access_token)
                         api.init();
                         resolve(response)
                         return response
