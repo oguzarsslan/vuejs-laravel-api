@@ -74,6 +74,8 @@ export default createStore({
                     })
             })
         },
+
+        //headerdan token yollanıcak
         deleteUser({commit}, userid) {
             return new Promise((resolve, reject) => {
                 // axios.post('http://127.0.0.1:8000/delete', {id: userid},
@@ -116,10 +118,27 @@ export default createStore({
                     })
             })
         },
-        logout({commit}) {
-            return new Promise(() => {
-                commit("clearToken")
-                localStorage.removeItem("token")
+        logoutUser({commit}) {
+            return new Promise((resolve, reject) => {
+                // let param = {id: userid};
+                // api.post('/logout', param)
+                axios.get('http://127.0.0.1:8000/logout', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                    .then(response => {
+                            commit("clearToken")
+                            localStorage.removeItem("token")
+                            resolve(response)
+                            console.log(localStorage.getItem('token'))
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                        reject(error)
+                        return error
+                    })
             })
         }
     },

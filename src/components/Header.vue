@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch("logout")
+      this.$store.dispatch("logoutUser")
       this.$router.replace('/login')
     }
   }
