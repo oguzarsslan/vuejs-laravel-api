@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Login from "../components/auth/Auth";
+import Auth from "../components/auth/Auth";
 import Users from "../components/users/Users"
 
 const routes = [
@@ -16,8 +16,15 @@ const routes = [
     },
     {
         path: '/login',
-        name: 'Login',
-        component: Login
+        name: 'Auth',
+        component: Auth,
+        // beforeEnter(to, from, next) {
+        //   if (!localStorage.getItem('token')) {
+        //     next()
+        //   } else {
+        //     next('/about')
+        //   }
+        // }
     },
     {
         path: '/users',

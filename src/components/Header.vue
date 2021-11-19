@@ -50,7 +50,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("logoutUser")
-      this.$router.replace('/login')
+      // this.$router.replace('/login')
     }
   }
 }
