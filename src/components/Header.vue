@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import router from "../router";
+
 export default {
   name: "Header",
   data() {
@@ -50,7 +52,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("logoutUser")
-      // this.$router.replace('/login')
+      router.push("/login")
     }
   }
 }

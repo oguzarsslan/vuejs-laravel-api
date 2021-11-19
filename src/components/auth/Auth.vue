@@ -35,7 +35,7 @@
                   </div>
                 </small>
                 <button type="submit" class="btn btn-primary" @click="setData()"
-                        :class="{'disabled' : v$.user.email.$error || v$.user.password.$error}">
+                        :class="{'disabled' : v$.user.email.$error || v$.user.password.$error} ">
                   {{ isUser ? 'Sign In' : 'Sign Up' }}
                 </button>
               </div>
@@ -56,7 +56,7 @@
 <script>
 import useVuelidate from '@vuelidate/core'
 import {required, email, minLength, maxLength} from '@vuelidate/validators'
-import axios from "axios";
+import router from "../../router";
 
 export default {
   name: "Auth",
@@ -101,12 +101,16 @@ export default {
     setData() {
       if (this.isUser) {
         this.$store.dispatch('loginUser', this.user)
-        // this.$router.replace("/")
+        router.push("/about")
+        this.$store.state.message = ""
       } else {
         this.$store.dispatch('setDataToServer', this.user)
         this.isUser = true
         this.user.email = ""
         this.user.password = ""
+        setTimeout(() => {
+          this.$swal(this.$store.state.message);
+        }, 500)
       }
     }
   }

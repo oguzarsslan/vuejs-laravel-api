@@ -13,6 +13,9 @@ export default {
   name: 'App',
   components: {
     Home
+  },
+  created() {
+    this.$store.dispatch('initAuth')
   }
 }
 </script>
