@@ -34,7 +34,8 @@
                     <div class="error-msg text-danger mb-1">{{ error.$message }}</div>
                   </div>
                 </small>
-                <button type="submit" class="btn btn-primary" @click="setData()">
+                <button type="submit" class="btn btn-primary" @click="setData()"
+                        :class="{'disabled' : v$.user.email.$error || v$.user.password.$error}">
                   {{ isUser ? 'Sign In' : 'Sign Up' }}
                 </button>
               </div>
