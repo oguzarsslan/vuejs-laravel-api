@@ -17,13 +17,23 @@
                   <label class="col-form-label" for="name">Name</label>
                 </div>
                 <div class="col-md-7 mb-3">
-                  <input class="form-control" type="text" id="name" :value="getAuthUser.name">
+                  <input
+                      class="form-control"
+                      type="text"
+                      id="name"
+                      v-model="getAuthUser.name"
+                  >
                 </div>
                 <div class="col-md-5 mb-3">
                   <label class="col-form-label" for="email">Email</label>
                 </div>
                 <div class="col-md-7 mb-3">
-                  <input class="form-control" type="text" id="email" :value="getAuthUser.email">
+                  <input
+                      class="form-control"
+                      type="text"
+                      id="email"
+                      v-model="getAuthUser.email"
+                  >
                 </div>
                 <!--                <div class="col-md-5 mb-3">-->
                 <!--                  <label class="col-form-label" for="password">Password</label>-->
@@ -32,7 +42,7 @@
                 <!--                  <input class="form-control" type="text" id="password" :value="getAuthUser.password">-->
                 <!--                </div>-->
                 <div class="offset-md-9 col-md-3 mb-3">
-                  <button class="btn btn-success text-right">Update</button>
+                  <button class="btn btn-success text-right" @click="updateUser()">Update</button>
                 </div>
               </div>
             </div>
@@ -44,21 +54,54 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
+import {email, maxLength, minLength, required} from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
 
 export default {
   name: "Profile",
-  data() {
-    return {}
+  setup() {
+    return {v$: useVuelidate()}
   },
-  created() {
-    this.$store.dispatch('getUser')
+  data() {
+    return {
+    }
+  },
+  validations() {
+    return {
+      user: {
+        name: {
+          required,
+          minLength: minLength(2),
+          maxLength: maxLength(10)
+        },
+        email: {
+          required,
+          email
+        }
+      }
+    }
   },
   computed: {
     ...mapGetters([
       "getAuthUser"
+    ]),
+    ...mapActions([
+      "getUser",
     ])
   },
+  created() {
+    this.getUser;
+    console.log(this.$store.state.authUser)
+  },
+  methods: {
+    ...mapActions([
+      "getDataFromServer",
+    ]),
+    updateUser() {
+      this.$store.dispatch('updateUser', this.getAuthUser)
+    }
+  }
 }
 </script>
 

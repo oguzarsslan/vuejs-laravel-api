@@ -228,6 +228,27 @@ export default createStore({
                         }
                     )
             })
+        },
+        updateUser({commit}, user) {
+            return new Promise((resolve, reject) => {
+                axios.post('http://127.0.0.1:8000/updateUser', user, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                )
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            console.log(error)
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
         }
     },
     modules: {}

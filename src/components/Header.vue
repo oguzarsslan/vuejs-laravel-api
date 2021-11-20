@@ -13,9 +13,6 @@
               <router-link to="/" tag="a">Home</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/about" tag="a">About</router-link>
-            </li>
-            <li class="nav-item">
               <router-link to="/blogs" tag="a">Blogs</router-link>
             </li>
             <li class="nav-item">
