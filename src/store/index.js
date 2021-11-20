@@ -8,7 +8,8 @@ export default createStore({
         item: "",
         user: {},
         token: "",
-        message: ""
+        message: "",
+        authUser: ""
     },
     getters: {
         getData(state) {
@@ -22,6 +23,9 @@ export default createStore({
         },
         getMessage(state) {
             return state.message
+        },
+        getAuthUser(state) {
+            return state.authUser
         }
     },
     mutations: {
@@ -36,6 +40,9 @@ export default createStore({
         // },
         setMessage(state, data) {
             state.message = data
+        },
+        setAuthUser(state, data) {
+            state.authUser = data
         }
     },
     actions: {
@@ -152,9 +159,9 @@ export default createStore({
                             console.log(response.data.access_token)
                             commit('setToken', response.data.access_token)
                             localStorage.setItem("token", response.data.access_token)
-                            localStorage.setItem("expirationDate", new Date().getTime() + 5000)
+                            localStorage.setItem("expirationDate", new Date().getTime() + 3600000)
                             api.init();
-                            dispatch('setTimeoutTimer', 5000)
+                            dispatch('setTimeoutTimer', 3600000)
                             resolve(response)
                             return response
                         }
@@ -168,7 +175,7 @@ export default createStore({
                     )
             })
         },
-        logoutUser({commit}) {
+        logoutUser() {
             return new Promise((resolve, reject) => {
                 // api.post('/logout')
                 axios.get('http://127.0.0.1:8000/logout', {
@@ -198,6 +205,29 @@ export default createStore({
             setTimeout(() => {
                 dispatch('logoutUser')
             }, data)
+        },
+        getUser({commit}) {
+            return new Promise((resolve, reject) => {
+                // api.post('/getUser')
+                axios.get('http://127.0.0.1:8000/getUser', {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                )
+                    .then(response => {
+                            let user = response.data[0]
+                            commit("setAuthUser", user)
+                            console.log(user)
+                            resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
         }
     },
     modules: {}

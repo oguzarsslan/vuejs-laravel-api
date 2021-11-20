@@ -126,5 +126,10 @@ export default {
 
 p {
   margin-top: 20px;
+  text-align: center;
+}
+
+.btn{
+  min-inline-size: -webkit-fill-available;
 }
 </style>
