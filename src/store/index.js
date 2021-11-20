@@ -39,16 +39,25 @@ export default createStore({
         }
     },
     actions: {
-        initAuth ({commit}){
+        initAuth({commit, dispatch}) {
             let token = localStorage.getItem('token')
             console.log(token)
-            if (token){
-                commit('setToken', token)
-            }else{
+            if (token) {
+                let expirationDate = localStorage.getItem("expirationDate")
+                let time = new Date().getTime()
+                if (time >= +expirationDate) {
+                    console.log("time out")
+                    dispatch("logoutUser")
+                } else {
+                    commit('setToken', token)
+                    let timerSecond = +expirationDate - time
+                    console.log(timerSecond)
+                    dispatch('setTimeoutTimer', timerSecond)
+                }
+            } else {
                 router.push("/login")
                 return false
             }
-
         },
         getDataFromServer({commit}) {
             return new Promise((resolve, reject) => {
@@ -124,7 +133,7 @@ export default createStore({
                     )
             })
         },
-        loginUser({commit}, user) {
+        loginUser({commit, dispatch}, user) {
             return new Promise((resolve, reject) => {
                 // axios.post("http://127.0.0.1:8000/login", {
                 //     email: user.email,
@@ -143,7 +152,9 @@ export default createStore({
                             console.log(response.data.access_token)
                             commit('setToken', response.data.access_token)
                             localStorage.setItem("token", response.data.access_token)
+                            localStorage.setItem("expirationDate", new Date().getTime() + 5000)
                             api.init();
+                            dispatch('setTimeoutTimer', 5000)
                             resolve(response)
                             return response
                         }
@@ -159,26 +170,34 @@ export default createStore({
         },
         logoutUser({commit}) {
             return new Promise((resolve, reject) => {
-                // let param = {id: userid};
-                // api.post('/logout', param)
+                // api.post('/logout')
                 axios.get('http://127.0.0.1:8000/logout', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
                     }
-                })
+                )
                     .then(response => {
                             // commit("clearToken")
                             localStorage.removeItem("token")
+                            localStorage.removeItem("expirationDate")
                             resolve(response)
                             console.log(localStorage.getItem('token'))
+                            router.replace("/login")
                             return response
                         }
                     )
                     .catch(function (error) {
-                        reject(error)
-                        return error
-                    })
+                            reject(error)
+                            return error
+                        }
+                    )
             })
+        },
+        setTimeoutTimer({dispatch}, data) {
+            setTimeout(() => {
+                dispatch('logoutUser')
+            }, data)
         }
     },
     modules: {}
