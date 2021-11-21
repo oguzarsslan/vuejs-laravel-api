@@ -20,7 +20,8 @@
                 <label class="col-form-label">Category</label>
               </div>
               <div class="col-md-7 mb-3">
-                <select class="form-select" id="category" aria-label="Floating label select example" v-model="blog.category">
+                <select class="form-select" id="category" aria-label="Floating label select example"
+                        v-model="blog.category">
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
@@ -31,6 +32,12 @@
               </div>
               <div class="col-md-7 mb-3">
                 <textarea class="form-control" id="body" rows="4" v-model="blog.body"></textarea>
+              </div>
+              <div class="col-md-5 mb-3">
+                <label class="col-form-label" for="images">Image(s)</label>
+              </div>
+              <div class="col-md-7 mb-3">
+                <input class="form-control" type="file" ref="file" @change="uploadImages()">
               </div>
               <div class="offset-md-9 col-md-3 mb-3">
                 <button class="btn btn-success text-right" @click="setBlog()">Save</button>
@@ -51,14 +58,21 @@ export default {
       blog: {
         title: "",
         body: "",
-        category: ""
-      }
+        category: "",
+        images: ""
+      },
     }
   },
   methods: {
     setBlog() {
+      this.uploadImages();
+      console.log(this.blog)
       this.$store.dispatch('setBlog', this.blog);
-    }
+    },
+    uploadImages() {
+      const file = this.$refs.file.files[0].name;
+      this.blog.images = file;
+    },
   }
 }
 </script>
