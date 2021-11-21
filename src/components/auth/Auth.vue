@@ -101,7 +101,7 @@ export default {
     setData() {
       if (this.isUser) {
         this.$store.dispatch('loginUser', this.user)
-        router.push("/about")
+        router.push("/")
         this.$store.state.message = ""
       } else {
         this.$store.dispatch('setDataToServer', this.user)

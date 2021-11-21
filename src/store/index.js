@@ -104,7 +104,6 @@ export default createStore({
                         }
                     )
                     .catch(function (error) {
-                            // commit('setMessage', error.data.error)
                             // console.log(error.data)
                             reject(error)
                             return error
@@ -249,7 +248,29 @@ export default createStore({
                         }
                     )
             })
-        }
+        },
+        setBlog({commit}, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('http://127.0.0.1:8000/storeBlog', data, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                )
+                    .then(response => {
+                            console.log(response.data)
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            console.log(error)
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
     },
     modules: {}
 })

@@ -2,10 +2,13 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Auth from "../components/auth/Auth";
 import Users from "../components/users/Users"
 import Profile from "../components/profile/Profile";
+import Index from "../components/index/Index"
+import Blogs from "../components/blogs/Blogs";
 
 const routes = [
-    {
-        path: '/',        name: 'Home',
+    // {
+    //     path: '/',
+    //     name: 'Home',
         // beforeEnter(to, from, next) {
         //   if (!localStorage.getItem('token')) {
         //     next('/login')
@@ -13,6 +16,11 @@ const routes = [
         //     next()
         //   }
         // }
+    // },
+    {
+        path: '/',
+        name: 'Index',
+        component: Index,
     },
     {
         path: '/login',
@@ -30,6 +38,11 @@ const routes = [
                 next()
             }
         }
+    },
+    {
+        path: '/blogs',
+        name: 'Blogs',
+        component: Blogs,
     },
     {
         path: '/profile',
