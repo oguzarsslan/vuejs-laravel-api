@@ -37,7 +37,7 @@
                 <label class="col-form-label" for="images">Image(s)</label>
               </div>
               <div class="col-md-7 mb-3">
-                <input class="form-control" type="file" ref="file" @change="uploadImages()">
+                <input class="form-control" id="images" type="file" ref="file" @change="uploadImages()">
               </div>
               <div class="offset-md-9 col-md-3 mb-3">
                 <button class="btn btn-success text-right" @click="setBlog()">Save</button>
@@ -66,12 +66,16 @@ export default {
   methods: {
     setBlog() {
       this.uploadImages();
-      console.log(this.blog)
-      this.$store.dispatch('setBlog', this.blog);
+      let data = new FormData();
+      data.append('title', this.blog.title)
+      data.append('body', this.blog.body)
+      data.append('category', this.blog.category)
+      data.append('images', this.blog.images)
+      console.log(data)
+      this.$store.dispatch('setBlog', data);
     },
     uploadImages() {
-      const file = this.$refs.file.files[0].name;
-      this.blog.images = file;
+      this.blog.images = this.$refs.file.files[0];
     },
   }
 }

@@ -3,6 +3,12 @@ import api from "../api";
 import axios from "axios";
 import router from "../router";
 
+// let config = {
+//     headers: {
+//         'Authorization': `Bearer ${localStorage.getItem('token')}`,
+//     }
+// }
+
 export default createStore({
     state: {
         item: "",
@@ -253,7 +259,8 @@ export default createStore({
             return new Promise((resolve, reject) => {
                 axios.post('http://127.0.0.1:8000/storeBlog', data, {
                         headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
                         }
                     }
                 )
