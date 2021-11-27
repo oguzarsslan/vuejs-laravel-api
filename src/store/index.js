@@ -15,7 +15,8 @@ export default createStore({
         user: {},
         token: "",
         message: "",
-        authUser: ""
+        authUser: "",
+        blogs: ""
     },
     getters: {
         getData(state) {
@@ -32,6 +33,9 @@ export default createStore({
         },
         getAuthUser(state) {
             return state.authUser
+        },
+        getBlog(state) {
+            return state.blogs
         }
     },
     mutations: {
@@ -49,6 +53,9 @@ export default createStore({
         },
         setAuthUser(state, data) {
             state.authUser = data
+        },
+        setBlogs(state, data) {
+            state.blogs = data
         }
     },
     actions: {
@@ -272,6 +279,29 @@ export default createStore({
                     )
                     .catch(function (error) {
                             console.log(error)
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        getBlogs({commit}) {
+            return new Promise((resolve, reject) => {
+                // api.post('/getUser')
+                axios.get('http://127.0.0.1:8000/getBlogs', {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                )
+                    .then(response => {
+                            let blogs = response
+                            commit("setBlogs", blogs)
+                            console.log(blogs)
+                            resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
                             reject(error)
                             return error
                         }

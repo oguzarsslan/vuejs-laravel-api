@@ -3,8 +3,8 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <div class="row mt-5">
-            <div class="offset-md-4 col-md-4">
+          <div class="row mt-5 justify-content-md-center">
+            <div class="col-md-4">
               <div class="row">
                 <div class="col-md-5 mb-3">
                   <label class="col-form-label" for="created_at">Created At Date</label>

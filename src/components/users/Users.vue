@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <div class="row mt-5">
-          <div class="offset-3 col-md-6">
+        <div class="row mt-5 justify-content-md-center">
+          <div class="col-md-6">
             <table class="table">
               <thead>
               <tr>

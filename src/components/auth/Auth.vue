@@ -3,8 +3,8 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <div class="row mt-5">
-            <div class="offset-5 col-md-2">
+          <div class="row mt-5 justify-content-md-center">
+            <div class="col-md-2">
               <div class="form">
                 <div class="mb-3">
                   <label class="form-label">Email address</label>
