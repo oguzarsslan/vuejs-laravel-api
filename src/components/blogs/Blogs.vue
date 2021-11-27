@@ -34,10 +34,10 @@
                 <textarea class="form-control" id="body" rows="4" v-model="blog.body"></textarea>
               </div>
               <div class="col-md-5 mb-3">
-                <label class="col-form-label" for="images">Image(s)</label>
+                <label class="col-form-label" for="files">Image(s)</label>
               </div>
               <div class="col-md-7 mb-3">
-                <input class="form-control" id="images" type="file" ref="file" @change="uploadImages()">
+                <input class="form-control" id="files" type="file" ref="files" multiple @change="uploadImages()">
               </div>
               <div class="offset-md-9 col-md-3 mb-3">
                 <button class="btn btn-success text-right" @click="setBlog()">Save</button>
@@ -70,12 +70,17 @@ export default {
       data.append('title', this.blog.title)
       data.append('body', this.blog.body)
       data.append('category', this.blog.category)
-      data.append('images', this.blog.images)
+
+      for (let i = 0; i < this.blog.images .length; i++) {
+        let image = this.blog.images [i];
+        data.append('images[' + i + ']', image)
+      }
+
       console.log(data)
       this.$store.dispatch('setBlog', data);
     },
     uploadImages() {
-      this.blog.images = this.$refs.file.files[0];
+      this.blog.images = this.$refs.files.files;
     },
   }
 }
