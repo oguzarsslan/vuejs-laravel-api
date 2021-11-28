@@ -82,7 +82,13 @@
                     <h5 class="card-title">{{ blog.title }}</h5>
                     <p class="card-text">{{ blog.body }}</p>
                     <span>{{ blog.category }}</span>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <router-link
+                        class="btn btn-primary text-white"
+                        tag="a"
+                        :to="{name: 'BlogDetail', params: {id: blog.id} }"
+                    >
+                      Details
+                    </router-link>
                   </div>
                 </div>
               </div>

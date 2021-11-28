@@ -16,7 +16,8 @@ export default createStore({
         token: "",
         message: "",
         authUser: "",
-        blogs: ""
+        blogs: "",
+        blogDetail: ""
     },
     getters: {
         getData(state) {
@@ -36,6 +37,9 @@ export default createStore({
         },
         getBlog(state) {
             return state.blogs
+        },
+        getBlogDetail(state) {
+            return state.blogDetail
         }
     },
     mutations: {
@@ -45,9 +49,6 @@ export default createStore({
         setToken(state, data) {
             state.token = data
         },
-        // clearToken(state) {
-        //     state.token = ""
-        // },
         setMessage(state, data) {
             state.message = data
         },
@@ -56,6 +57,9 @@ export default createStore({
         },
         setBlogs(state, data) {
             state.blogs = data
+        },
+        setBlogDetail(state, data) {
+            state.blogDetail = data
         }
     },
     actions: {
@@ -308,6 +312,30 @@ export default createStore({
                     )
             })
         },
+        getBlogDetails({commit}, id) {
+            return new Promise((resolve, reject) => {
+                // api.post('/getUser')
+                axios.get('http://127.0.0.1:8000/getBlog/' + id, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                )
+                    .then(response => {
+                            let blogDetail = response
+                            commit("setBlogDetail", blogDetail)
+                            console.log(blogDetail)
+                            resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+
     },
     modules: {}
 })

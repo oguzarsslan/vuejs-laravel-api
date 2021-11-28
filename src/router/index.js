@@ -4,18 +4,19 @@ import Users from "../components/users/Users"
 import Profile from "../components/profile/Profile";
 import Index from "../components/index/Index"
 import Blogs from "../components/blogs/Blogs";
+import BlogDetail from "../components/blogs/BlogDetail";
 
 const routes = [
     // {
     //     path: '/',
     //     name: 'Home',
-        // beforeEnter(to, from, next) {
-        //   if (!localStorage.getItem('token')) {
-        //     next('/login')
-        //   } else {
-        //     next()
-        //   }
-        // }
+    // beforeEnter(to, from, next) {
+    //   if (!localStorage.getItem('token')) {
+    //     next('/login')
+    //   } else {
+    //     next()
+    //   }
+    // }
     // },
     {
         path: '/',
@@ -26,6 +27,13 @@ const routes = [
         path: '/login',
         name: 'Auth',
         component: Auth,
+        beforeEnter(to, from, next) {
+            if (localStorage.getItem('token')) {
+                next('/')
+            } else {
+                next()
+            }
+        }
     },
     {
         path: '/users',
@@ -43,6 +51,25 @@ const routes = [
         path: '/blogs',
         name: 'Blogs',
         component: Blogs,
+        beforeEnter(to, from, next) {
+            if (!localStorage.getItem('token')) {
+                next('/login')
+            } else {
+                next()
+            }
+        }
+    },
+    {
+        path: '/blog/:id',
+        name: 'BlogDetail',
+        component: BlogDetail,
+        // beforeEnter(to, from, next) {
+        //     if (!localStorage.getItem('token')) {
+        //         next('/login')
+        //     } else {
+        //         next()
+        //     }
+        // }
     },
     {
         path: '/profile',
