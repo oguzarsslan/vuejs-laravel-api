@@ -17,24 +17,50 @@
                     type="text"
                     id="title"
                     v-model="blog.title"
+                    :class="{'is-invalid' : v$.blog.title.$error}"
+                    @blur="v$.blog.title.$touch()"
                 >
+                <small>
+                  <div class="input-errors" v-for="(error, index) of v$.blog.title.$errors" :key="index">
+                    <div class="error-msg text-danger mb-1">{{ error.$message }}</div>
+                  </div>
+                </small>
               </div>
               <div class="col-md-5 mb-3">
                 <label class="col-form-label">Category</label>
               </div>
               <div class="col-md-7 mb-3">
-                <select class="form-select" id="category" aria-label="Floating label select example"
-                        v-model="blog.category">
+                <select class="form-select"
+                        id="category"
+                        aria-label="Floating label select example"
+                        v-model="blog.category"
+                        :class="{'is-invalid' : v$.blog.category.$error}"
+                        @blur="v$.blog.category.$touch()">
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
+                <small>
+                  <div class="input-errors" v-for="(error, index) of v$.blog.category.$errors" :key="index">
+                    <div class="error-msg text-danger mb-1">{{ error.$message }}</div>
+                  </div>
+                </small>
               </div>
               <div class="col-md-5 mb-3">
                 <label class="col-form-label">Body</label>
               </div>
               <div class="col-md-7 mb-3">
-                <textarea class="form-control" id="body" rows="4" v-model="blog.body"></textarea>
+                <textarea
+                    class="form-control"
+                    id="body" rows="4"
+                    v-model="blog.body"
+                    :class="{'is-invalid' : v$.blog.body.$error}"
+                    @blur="v$.blog.body.$touch()"></textarea>
+                <small>
+                  <div class="input-errors" v-for="(error, index) of v$.blog.body.$errors" :key="index">
+                    <div class="error-msg text-danger mb-1">{{ error.$message }}</div>
+                  </div>
+                </small>
               </div>
               <div class="col-md-5 mb-3">
                 <label class="col-form-label" for="files">Image(s)</label>
@@ -71,9 +97,14 @@
 <script>
 import {mapActions} from "vuex";
 import {mapGetters} from "vuex";
+import {email, maxLength, minLength, required} from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
 
 export default {
   name: "Blogs",
+  setup() {
+    return {v$: useVuelidate()}
+  },
   data() {
     return {
       blog: {
@@ -84,6 +115,25 @@ export default {
       },
       show: false,
       apiUrl: "http://127.0.0.1:8000/images/"
+    }
+  },
+  validations() {
+    return {
+      blog: {
+        title: {
+          required,
+          minLength: minLength(5),
+          maxLength: maxLength(20)
+        },
+        body: {
+          required,
+          minLength: minLength(5),
+          maxLength: maxLength(255)
+        },
+        category: {
+          required
+        }
+      }
     }
   },
   methods: {

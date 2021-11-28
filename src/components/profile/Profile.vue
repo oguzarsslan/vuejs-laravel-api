@@ -29,8 +29,8 @@
                 </div>
                 <div class="col-md-7 mb-3">
                   <input
+                      type="email"
                       class="form-control"
-                      type="text"
                       id="email"
                       v-model="getAuthUser.email"
                   >
@@ -60,27 +60,8 @@ import useVuelidate from "@vuelidate/core";
 
 export default {
   name: "Profile",
-  setup() {
-    return {v$: useVuelidate()}
-  },
   data() {
-    return {
-    }
-  },
-  validations() {
-    return {
-      user: {
-        name: {
-          required,
-          minLength: minLength(2),
-          maxLength: maxLength(10)
-        },
-        email: {
-          required,
-          email
-        }
-      }
-    }
+    return {}
   },
   computed: {
     ...mapGetters([
@@ -106,10 +87,6 @@ export default {
 </script>
 
 <style scoped>
-.form-control {
-  /*border-style: none;*/
-}
-
 .btn {
   float: right;
 }
