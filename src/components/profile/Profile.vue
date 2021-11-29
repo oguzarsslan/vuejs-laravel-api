@@ -76,9 +76,6 @@ export default {
     console.log(this.$store.state.authUser)
   },
   methods: {
-    ...mapActions([
-      "getDataFromServer",
-    ]),
     updateUser() {
       this.$store.dispatch('updateUser', this.getAuthUser)
     }

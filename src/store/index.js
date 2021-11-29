@@ -191,7 +191,7 @@ export default createStore({
                     )
             })
         },
-        logoutUser() {
+        logoutUser({commit}) {
             return new Promise((resolve, reject) => {
                 // api.post('/logout')
                 axios.get('http://127.0.0.1:8000/logout', {
@@ -232,7 +232,7 @@ export default createStore({
                     }
                 )
                     .then(response => {
-                            let user = response.data[0]
+                            let user = response.data
                             commit("setAuthUser", user)
                             console.log(user)
                             resolve(response)

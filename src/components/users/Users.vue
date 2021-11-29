@@ -21,6 +21,9 @@
                 <td>
                   <button class="btn-xs btn-danger" @click="deleteUser(item.id)">delete</button>
                 </td>
+                <!--                <td>-->
+                <!--                  <button class="btn-xs btn-success" @click="deleteUser(item.id)">send</button>-->
+                <!--                </td>-->
               </tr>
               </tbody>
             </table>
@@ -34,9 +37,11 @@
 <script>
 import {mapActions} from "vuex";
 import {mapGetters} from "vuex";
+import Profile from "../profile/Profile";
 
 export default {
   name: "Users",
+  components: {Profile},
   methods: {
     ...mapActions([
       "getDataFromServer",
@@ -49,11 +54,16 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "getData"
+      "getData",
+      "getAuthUser"
+    ]),
+    ...mapActions([
+      "getUser",
     ])
   },
   created() {
     this.getDataFromServer();
+    this.getUser;
   }
 }
 </script>
