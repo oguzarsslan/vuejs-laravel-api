@@ -17,7 +17,8 @@ export default createStore({
         message: "",
         authUser: "",
         blogs: "",
-        blogDetail: ""
+        blogDetail: "",
+        Friends: ""
     },
     getters: {
         getData(state) {
@@ -40,6 +41,9 @@ export default createStore({
         },
         getBlogDetail(state) {
             return state.blogDetail
+        },
+        getFriend(state) {
+            return state.Friends
         }
     },
     mutations: {
@@ -60,6 +64,9 @@ export default createStore({
         },
         setBlogDetail(state, data) {
             state.blogDetail = data
+        },
+        getFriend(state, data) {
+            state.allFriendships = data
         }
     },
     actions: {
@@ -101,6 +108,7 @@ export default createStore({
                 })
                     .then(response => {
                             commit('setData', response)
+                            // console.log(response.data)
                             resolve(response)
                         }
                     )
@@ -130,20 +138,20 @@ export default createStore({
         },
         deleteUser({commit}, userid) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/delete', {id: userid}, {
+                // axios.post('http://127.0.0.1:8000/delete', {id: userid}, {
+                //         headers: {
+                //             'Authorization': `Bearer ${localStorage.getItem('token')}`
+                //         }
+                //     }
+                // )
+                //     let param = {id: userid};
+                api.post('/delete', {id: userid},
+                    {
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
                     }
                 )
-                    // let param = {id: userid};
-                    // api.post('/delete', {
-                    //         headers: {
-                    //             'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    //         },
-                    //         param
-                    //     }
-                    // )
                     .then(response => {
                             resolve(response)
                             return response
@@ -335,7 +343,29 @@ export default createStore({
                     )
             })
         },
-
+        getFriends({commit}) {
+            return new Promise((resolve, reject) => {
+                // api.post('/getUser')
+                axios.get('http://127.0.0.1:8000/getFriends', {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                )
+                    .then(response => {
+                            let Friends = response.data
+                            commit("getFriend", Friends)
+                            console.log(Friends)
+                            resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
     },
     modules: {}
 })

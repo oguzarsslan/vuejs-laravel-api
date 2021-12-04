@@ -21,9 +21,9 @@
                 <td>
                   <button class="btn-xs btn-danger" @click="deleteUser(item.id)">delete</button>
                 </td>
-                <!--                <td>-->
-                <!--                  <button class="btn-xs btn-success" @click="deleteUser(item.id)">send</button>-->
-                <!--                </td>-->
+                <td>
+                  <button class="btn-xs btn-success">Add Friends</button>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -41,6 +41,9 @@ import Profile from "../profile/Profile";
 
 export default {
   name: "Users",
+  data() {
+    return {}
+  },
   components: {Profile},
   methods: {
     ...mapActions([
@@ -55,15 +58,18 @@ export default {
   computed: {
     ...mapGetters([
       "getData",
-      "getAuthUser"
+      "getAuthUser",
+      "getFriend"
     ]),
     ...mapActions([
       "getUser",
+      "getFriends"
     ])
   },
   created() {
     this.getDataFromServer();
     this.getUser;
+    this.getFriends;
   }
 }
 </script>
