@@ -21,8 +21,8 @@ const ApiService = {
         axios.defaults.headers.common = {}
     },
 
-    get(resource) {
-        return axios.get(resource)
+    get(resource, config = null) {
+        return axios.get(resource, config)
     },
 
     post(resource, data, config = null) {

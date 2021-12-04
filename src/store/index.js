@@ -18,7 +18,8 @@ export default createStore({
         authUser: "",
         blogs: "",
         blogDetail: "",
-        Friends: ""
+        Friends: "",
+        FriendsRequest: "",
     },
     getters: {
         getData(state) {
@@ -44,7 +45,10 @@ export default createStore({
         },
         getFriend(state) {
             return state.Friends
-        }
+        },
+        getFriendRequest(state) {
+            return state.FriendsRequest
+        },
     },
     mutations: {
         setData(state, data) {
@@ -65,9 +69,12 @@ export default createStore({
         setBlogDetail(state, data) {
             state.blogDetail = data
         },
-        getFriend(state, data) {
-            state.allFriendships = data
-        }
+        setFriend(state, data) {
+            state.Friends = data
+        },
+        setFriendRequest(state, data) {
+            state.FriendsRequest = data
+        },
     },
     actions: {
         initAuth({commit, dispatch}) {
@@ -345,18 +352,104 @@ export default createStore({
         },
         getFriends({commit}) {
             return new Promise((resolve, reject) => {
-                // api.post('/getUser')
-                axios.get('http://127.0.0.1:8000/getFriends', {
+                api.get('/getFriends', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                    // axios.get('http://127.0.0.1:8000/getFriends', {
+                    //         headers: {
+                    //             'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    //         }
+                    //     }
+                    // )
+                    .then(response => {
+                            let Friends = response.data
+                            commit("setFriend", Friends)
+                            console.log(Friends)
+                            resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        removeFriend({commit}, userid) {
+            return new Promise((resolve, reject) => {
+                // axios.post('http://127.0.0.1:8000/delete', {id: userid}, {
+                //         headers: {
+                //             'Authorization': `Bearer ${localStorage.getItem('token')}`
+                //         }
+                //     }
+                // )
+                //     let param = {id: userid};
+                api.post('/removeFriend', {id: userid},
+                    {
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
                     }
                 )
                     .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        getFriendRequests({commit}) {
+            return new Promise((resolve, reject) => {
+                api.get('/getRequest', {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                )
+                    // axios.get('http://127.0.0.1:8000/getFriends', {
+                    //         headers: {
+                    //             'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    //         }
+                    //     }
+                    // )
+                    .then(response => {
                             let Friends = response.data
-                            commit("getFriend", Friends)
+                            commit("setFriendRequest", Friends)
                             console.log(Friends)
                             resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        addFriends({commit}, userid) {
+            return new Promise((resolve, reject) => {
+                api.post('/getRequest', userid, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        }
+                    }
+                )
+                    // axios.get('http://127.0.0.1:8000/getFriends', {
+                    //         headers: {
+                    //             'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    //         }
+                    //     }
+                    // )
+                    .then(response => {
+                            resolve(response)
+                            return response
                         }
                     )
                     .catch(function (error) {
