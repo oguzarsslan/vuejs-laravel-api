@@ -25,6 +25,9 @@
               <a href="#" @click.prevent="logout">Logout</a>
             </li>
             <li class="nav-item">
+              <router-link to="/friends" tag="a">Friends</router-link>
+            </li>
+            <li class="nav-item">
               <router-link to="/profile" tag="a">Profile</router-link>
             </li>
           </ul>

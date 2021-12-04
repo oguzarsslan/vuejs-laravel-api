@@ -5,6 +5,7 @@ import Profile from "../components/profile/Profile";
 import Index from "../components/index/Index"
 import Blogs from "../components/blogs/Blogs";
 import BlogDetail from "../components/blogs/BlogDetail";
+import Friends from "../components/profile/Friends";
 
 const routes = [
     // {
@@ -75,6 +76,18 @@ const routes = [
         path: '/profile',
         name: 'Profile',
         component: Profile,
+    },
+    {
+        path: '/friends',
+        name: 'Friends',
+        component: Friends,
+        beforeEnter(to, from, next) {
+            if (!localStorage.getItem('token')) {
+                next('/')
+            } else {
+                next()
+            }
+        }
     },
 ]
 
