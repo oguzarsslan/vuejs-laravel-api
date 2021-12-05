@@ -6,6 +6,9 @@ import Index from "../components/index/Index"
 import Blogs from "../components/blogs/Blogs";
 import BlogDetail from "../components/blogs/BlogDetail";
 import Friends from "../components/profile/Friends";
+import Accepted from "../components/profile/accepted/Accepted";
+import Sent from "../components/profile/sent/Sent";
+import Blocked from "../components/profile/blocked/Blocked";
 
 const routes = [
     // {
@@ -89,6 +92,26 @@ const routes = [
             }
         }
     },
+    // {
+    //     path: '/1',
+    //     name: 'Accepted',
+    //     component: Accepted,
+    // },
+    // {
+    //     path: '/2',
+    //     name: 'Request',
+    //     component: Request,
+    // },
+    // {
+    //     path: '/3',
+    //     name: 'Sent',
+    //     component: Sent,
+    // },
+    // {
+    //     path: '/4',
+    //     name: 'Blocked',
+    //     component: Blocked,
+    // },
 ]
 
 const router = createRouter({

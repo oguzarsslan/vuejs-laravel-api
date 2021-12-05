@@ -17,11 +17,11 @@
                 </button>
                 <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-messages"
-                        type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">giden istekler
+                        type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Sent Requests
                 </button>
                 <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-settings"
-                        type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">engellenenler
+                        type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Blocked
                 </button>
               </div>
               <div class="tab-content" id="v-pills-tabContent">
@@ -35,11 +35,11 @@
                 </div>
                 <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
                      aria-labelledby="v-pills-messages-tab">
-                  ...
+                  <sent/>
                 </div>
                 <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
                      aria-labelledby="v-pills-settings-tab">
-                  ...
+                  <blocked/>
                 </div>
               </div>
             </div>
@@ -53,6 +53,8 @@
 <script>
 import Accepted from "./accepted/Accepted";
 import Request from "./request/Request";
+import Sent from "./sent/Sent";
+import Blocked from "./blocked/Blocked";
 
 export default {
   name: "Friends",
@@ -61,12 +63,15 @@ export default {
   },
   components: {
     Accepted,
-    Request
+    Request,
+    Sent,
+    Blocked
   },
-
 }
 </script>
 
 <style scoped>
-
+.nav-link {
+  text-align: left;
+}
 </style>

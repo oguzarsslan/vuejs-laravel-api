@@ -3,11 +3,11 @@ import api from "../api";
 import axios from "axios";
 import router from "../router";
 
-// let config = {
-//     headers: {
-//         'Authorization': `Bearer ${localStorage.getItem('token')}`,
-//     }
-// }
+let token = {
+    headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    }
+}
 
 export default createStore({
     state: {
@@ -20,6 +20,8 @@ export default createStore({
         blogDetail: "",
         Friends: "",
         FriendsRequest: "",
+        FriendSent: "",
+        Blocked: "",
     },
     getters: {
         getData(state) {
@@ -49,6 +51,12 @@ export default createStore({
         getFriendRequest(state) {
             return state.FriendsRequest
         },
+        getFriendSent(state) {
+            return state.FriendSent
+        },
+        getBlocked(state) {
+            return state.Blocked
+        },
     },
     mutations: {
         setData(state, data) {
@@ -75,6 +83,12 @@ export default createStore({
         setFriendRequest(state, data) {
             state.FriendsRequest = data
         },
+        setFriendSent(state, data) {
+            state.FriendSent = data
+        },
+        setBlocked(state, data) {
+            state.Blocked = data
+        },
     },
     actions: {
         initAuth({commit, dispatch}) {
@@ -98,35 +112,21 @@ export default createStore({
             }
         },
         getDataFromServer({commit}) {
-            return new Promise((resolve, reject) => {
-                // api.get('/get')
-                //     .then(response => {
-                //             commit('setData', response)
-                //             resolve(response)
-                //         }
-                //     )
-                //     .catch(function (error) {
-                //         console.log(error.message)
-                //     })
-                axios.get('http://127.0.0.1:8000/get', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
+            return new Promise((resolve) => {
+                api.get('/get', token)
                     .then(response => {
                             commit('setData', response)
-                            // console.log(response.data)
+                            console.log(response)
                             resolve(response)
                         }
                     )
                     .catch(function (error) {
-                        console.log(error)
+                        console.log(error.message)
                     })
             })
         },
         setDataToServer({commit}, data) {
             return new Promise((resolve, reject) => {
-                // axios.post('http://127.0.0.1:8000/store', data)
                 api.post('/store', data)
                     .then(response => {
                             commit('setMessage', response.data)
@@ -153,11 +153,7 @@ export default createStore({
                 // )
                 //     let param = {id: userid};
                 api.post('/delete', {id: userid},
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
+                    token
                 )
                     .then(response => {
                             resolve(response)
@@ -206,17 +202,10 @@ export default createStore({
                     )
             })
         },
-        logoutUser({commit}) {
+        logoutUser() {
             return new Promise((resolve, reject) => {
-                // api.post('/logout')
-                axios.get('http://127.0.0.1:8000/logout', {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
-                )
+                api.get('/logout', token)
                     .then(response => {
-                            // commit("clearToken")
                             localStorage.removeItem("token")
                             localStorage.removeItem("expirationDate")
                             resolve(response)
@@ -240,12 +229,7 @@ export default createStore({
         getUser({commit}) {
             return new Promise((resolve, reject) => {
                 // api.post('/getUser')
-                axios.get('http://127.0.0.1:8000/getUser', {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
-                )
+                axios.get('http://127.0.0.1:8000/getUser', token)
                     .then(response => {
                             let user = response.data
                             commit("setAuthUser", user)
@@ -262,12 +246,7 @@ export default createStore({
         },
         updateUser({commit}, user) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/updateUser', user, {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
-                )
+                axios.post('http://127.0.0.1:8000/updateUser', user, token)
                     .then(response => {
                             resolve(response)
                             return response
@@ -306,13 +285,7 @@ export default createStore({
         },
         getBlogs({commit}) {
             return new Promise((resolve, reject) => {
-                // api.post('/getUser')
-                axios.get('http://127.0.0.1:8000/getBlogs', {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
-                )
+                api.get('/getBlogs', token)
                     .then(response => {
                             let blogs = response
                             commit("setBlogs", blogs)
@@ -329,13 +302,13 @@ export default createStore({
         },
         getBlogDetails({commit}, id) {
             return new Promise((resolve, reject) => {
-                // api.post('/getUser')
-                axios.get('http://127.0.0.1:8000/getBlog/' + id, {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
-                )
+                api.get('/getBlog/' + id, token)
+                    // axios.get('http://127.0.0.1:8000/getBlog/' + id, {
+                    //         headers: {
+                    //             'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    //         }
+                    //     }
+                    // )
                     .then(response => {
                             let blogDetail = response
                             commit("setBlogDetail", blogDetail)
@@ -352,11 +325,7 @@ export default createStore({
         },
         getFriends({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/getFriends', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
+                api.get('/getFriends', token)
                     // axios.get('http://127.0.0.1:8000/getFriends', {
                     //         headers: {
                     //             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -379,20 +348,7 @@ export default createStore({
         },
         removeFriend({commit}, userid) {
             return new Promise((resolve, reject) => {
-                // axios.post('http://127.0.0.1:8000/delete', {id: userid}, {
-                //         headers: {
-                //             'Authorization': `Bearer ${localStorage.getItem('token')}`
-                //         }
-                //     }
-                // )
-                //     let param = {id: userid};
-                api.post('/removeFriend', {id: userid},
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
-                )
+                api.post('/removeFriend', {id: userid}, token)
                     .then(response => {
                             resolve(response)
                             return response
@@ -407,18 +363,7 @@ export default createStore({
         },
         getFriendRequests({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/getRequest', {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        }
-                    }
-                )
-                    // axios.get('http://127.0.0.1:8000/getFriends', {
-                    //         headers: {
-                    //             'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    //         }
-                    //     }
-                    // )
+                api.get('/getRequest', token)
                     .then(response => {
                             let Friends = response.data
                             commit("setFriendRequest", Friends)
@@ -435,18 +380,56 @@ export default createStore({
         },
         addFriends({commit}, userid) {
             return new Promise((resolve, reject) => {
-                api.post('/getRequest', userid, {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                api.post('/acceptFriend', {id: userid}, token)
+                    .then(response => {
+                            resolve(response)
+                            return response
                         }
-                    }
-                )
-                    // axios.get('http://127.0.0.1:8000/getFriends', {
-                    //         headers: {
-                    //             'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    //         }
-                    //     }
-                    // )
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        getFriendsSent({commit}) {
+            return new Promise((resolve, reject) => {
+                api.get('/getSent', token)
+                    .then(response => {
+                            let Friends = response.data
+                            commit("setFriendSent", Friends)
+                            console.log(Friends)
+                            resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        getBlockeds({commit}) {
+            return new Promise((resolve, reject) => {
+                api.get('/getBlocked', token)
+                    .then(response => {
+                            let Friends = response.data
+                            commit("setBlocked", Friends)
+                            console.log(Friends)
+                            resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        unblocked({commit}, userid) {
+            return new Promise((resolve, reject) => {
+                api.post('/unblockFriend', {id: userid}, token)
                     .then(response => {
                             resolve(response)
                             return response

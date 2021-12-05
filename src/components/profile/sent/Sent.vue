@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <p v-if="getFriendRequest == ''">You have no friend requests</p>
+        <p v-if="getFriendSent == ''">You have no requests sent</p>
         <table class="table" v-else>
           <thead>
           <tr>
@@ -14,14 +14,13 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="item in getFriendRequest">
+          <tr v-for="item in getFriendSent">
             <th scope="row">{{ item.item.id }}</th>
             <td>{{ item.item.id }}</td>
             <td>{{ item.item.name }}</td>
             <td>{{ item.item.email }}</td>
             <td>{{ new Date(item.created_at).toLocaleString()}}</td>
             <td>
-              <button class="btn-xs btn-success" @click="addFriends(item.item.id)">Accept</button>
               <button class="btn-xs btn-danger" @click="removeFriend(item.item.id)">Cancel</button>
             </td>
           </tr>
@@ -36,31 +35,24 @@
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  name: "Request",
+  name: "Sent",
   methods: {
     ...mapActions([
-      "getFriendRequests",
-      "addFriends"
+      "getFriendsSent",
     ]),
-    addFriends(itemid) {
-      this.$store.dispatch('addFriends', itemid).then(response => {
-        this.getFriendRequests();
-      })
-    },
     removeFriend(itemid) {
       this.$store.dispatch('removeFriend', itemid).then(response => {
-        this.getFriendRequests();
+        this.getFriendsSent();
       })
     }
   },
   computed: {
     ...mapGetters([
-      "getFriendRequest",
-      "addFriend"
+      "getFriendSent"
     ]),
   },
   created() {
-    this.getFriendRequests();
+    this.getFriendsSent();
   }
 }
 </script>

@@ -35,8 +35,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import Profile from "../profile/Profile";
 
 export default {
@@ -59,17 +58,14 @@ export default {
     ...mapGetters([
       "getData",
       "getAuthUser",
-      "getFriend"
     ]),
     ...mapActions([
       "getUser",
-      "getFriends"
     ])
   },
   created() {
     this.getDataFromServer();
     this.getUser;
-    this.getFriends;
   }
 }
 </script>

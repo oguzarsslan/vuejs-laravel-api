@@ -2,13 +2,15 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <table class="table">
+        <p v-if="getFriend == ''">You have no friends</p>
+        <table class="table" v-else>
           <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">Avatar</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
+            <th scope="col">Date</th>
           </tr>
           </thead>
           <tbody>
@@ -17,6 +19,7 @@
             <td>{{ item.item.id }}</td>
             <td>{{ item.item.name }}</td>
             <td>{{ item.item.email }}</td>
+            <td>{{ new Date(item.updated_at).toLocaleString()}}</td>
             <td>
               <button class="btn-xs btn-danger" @click="removeFriend(item.item.id)">Remove</button>
             </td>

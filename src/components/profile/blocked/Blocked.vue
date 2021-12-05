@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <p v-if="getFriendRequest == ''">You have no friend requests</p>
+        <p v-if="getBlocked == ''">There are no users you have blocked</p>
         <table class="table" v-else>
           <thead>
           <tr>
@@ -14,15 +14,14 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="item in getFriendRequest">
+          <tr v-for="item in getBlocked">
             <th scope="row">{{ item.item.id }}</th>
             <td>{{ item.item.id }}</td>
             <td>{{ item.item.name }}</td>
             <td>{{ item.item.email }}</td>
             <td>{{ new Date(item.created_at).toLocaleString()}}</td>
             <td>
-              <button class="btn-xs btn-success" @click="addFriends(item.item.id)">Accept</button>
-              <button class="btn-xs btn-danger" @click="removeFriend(item.item.id)">Cancel</button>
+              <button class="btn-xs btn-success" @click="unblocked(item.item.id)">Unblocked</button>
             </td>
           </tr>
           </tbody>
@@ -36,31 +35,24 @@
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  name: "Request",
+  name: "Blocked",
   methods: {
     ...mapActions([
-      "getFriendRequests",
-      "addFriends"
+      "getBlockeds",
     ]),
-    addFriends(itemid) {
-      this.$store.dispatch('addFriends', itemid).then(response => {
-        this.getFriendRequests();
-      })
-    },
-    removeFriend(itemid) {
-      this.$store.dispatch('removeFriend', itemid).then(response => {
-        this.getFriendRequests();
+    unblocked(itemid) {
+      this.$store.dispatch('unblocked', itemid).then(response => {
+        this.getBlockeds();
       })
     }
   },
   computed: {
     ...mapGetters([
-      "getFriendRequest",
-      "addFriend"
+      "getBlocked"
     ]),
   },
   created() {
-    this.getFriendRequests();
+    this.getBlockeds();
   }
 }
 </script>
