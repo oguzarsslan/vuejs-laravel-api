@@ -76,19 +76,10 @@ export default {
       defaultprofilephoto : "defaultprofilephoto.jpg"
     }
   },
-  computed: {
-    ...mapGetters([
-      "getAuthUser"
-    ]),
-    ...mapActions([
-      "getUser",
-    ])
-  },
-  created() {
-    this.getUser;
-    console.log(this.$store.state.authUser)
-  },
   methods: {
+    ...mapActions([
+      "getUser"
+    ]),
     updateUser() {
       let image = this.$refs.files.files[0];
       console.log(image)
@@ -101,9 +92,18 @@ export default {
       console.log(data);
 
       this.$store.dispatch('updateUser', data)
-      this.getUser;
+      this.getUser();
     },
-  }
+  },
+  computed: {
+    ...mapGetters([
+      "getAuthUser"
+    ]),
+  },
+  created() {
+    this.getUser();
+    console.log(this.$store.state.authUser)
+  },
 }
 </script>
 

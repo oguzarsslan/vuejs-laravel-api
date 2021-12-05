@@ -50,7 +50,7 @@
                     {{ cancel ? 'Cancel' : 'Pending' }}
                   </button>
                 </td>
-                <td v-else-if="item.status === 'blocked'">
+                <td v-else-if="item.status === 'blocked' && item.sender_id === item.id">
                   <button class="btn-xs"
                           :class="{'btn-danger' : cancel, 'btn-warning' : !cancel}"
                           @mouseover="mouseOver()"
