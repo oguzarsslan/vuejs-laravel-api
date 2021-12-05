@@ -246,7 +246,12 @@ export default createStore({
         },
         updateUser({commit}, user) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/updateUser', user, token)
+                axios.post('http://127.0.0.1:8000/updateUser', user, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    }
+                })
                     .then(response => {
                             resolve(response)
                             return response
@@ -393,6 +398,21 @@ export default createStore({
                     )
             })
         },
+        sendRequest({commit}, userid) {
+            return new Promise((resolve, reject) => {
+                api.post('/addFriend', {id: userid}, token)
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
         getFriendsSent({commit}) {
             return new Promise((resolve, reject) => {
                 api.get('/getSent', token)
@@ -418,6 +438,21 @@ export default createStore({
                             commit("setBlocked", Friends)
                             console.log(Friends)
                             resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        blocked({commit}, userid) {
+            return new Promise((resolve, reject) => {
+                api.post('/blockFriend', {id: userid}, token)
+                    .then(response => {
+                            resolve(response)
+                            return response
                         }
                     )
                     .catch(function (error) {

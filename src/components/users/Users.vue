@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="row mt-5 justify-content-md-center">
-          <div class="col-md-6">
+          <div class="col-md-8">
             <table class="table">
               <thead>
               <tr>
@@ -14,12 +14,16 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="item in getData.data">
+              <tr v-for="(item, index) in getData.data">
                 <th scope="row">{{ item.id }}</th>
                 <td>{{ item.name }}</td>
                 <td>{{ item.email }}</td>
                 <td>
                   <button class="btn-xs btn-danger" @click="deleteUser(item.id)">delete</button>
+                </td>
+                <td>
+                  <button class="btn-xs btn-outline-danger" disabled v-if="item.status === 'blocked'"> blocked</button>
+                  <button class="btn-xs btn-danger" @click="blocked(item.id)" v-else>block</button>
                 </td>
                 <td v-if="item.status === 'accepted'">
                   <button class="btn-xs btn-success"
@@ -32,19 +36,12 @@
                   </button>
                 </td>
                 <td v-else-if="item.status === 'pending' && item.sender_id === item.id">
-                  <button class="btn-xs btn-success"
-                          @click="addFriends(item.id)"
-                  >
-                    Accept
-                  </button>
-                  <button class="btn-xs btn-danger"
-                          @click="removeFriend(item.id)"
-                  >
-                    Cancel
-                  </button>
+                  <button class="btn-xs btn-success" @click="addFriends(item.id)"> Accept</button>
+                  <button class="btn-xs btn-danger" @click="removeFriend(item.id)"> Cancel</button>
                 </td>
                 <td v-else-if="item.status === 'pending'">
                   <button class="btn-xs btn-info"
+                          :id="item.id"
                           :class="{'btn-danger' : cancel}"
                           @mouseover="mouseOver(item.id)"
                           @mouseleave="mouseOver(item.id)"
@@ -64,7 +61,9 @@
                   </button>
                 </td>
                 <td v-else>
-                  <button class="btn-xs btn-success">Add Friends</button>
+                  <button class="btn-xs btn-success"
+                          @click="sendRequest(item.id)">Add Friends
+                  </button>
                 </td>
                 <td>{{ item.status }}</td>
               </tr>
@@ -92,6 +91,7 @@ export default {
   methods: {
     ...mapActions([
       "getDataFromServer",
+      "sendRequest"
     ]),
     deleteUser(itemid) {
       this.$store.dispatch('deleteUser', itemid).then(response => {
@@ -103,17 +103,27 @@ export default {
         this.getDataFromServer();
       })
     },
-    unblocked(itemid) {
-      this.$store.dispatch('unblocked', itemid).then(response => {
-        this.getDataFromServer();
-      })
-    },
     addFriends(itemid) {
       this.$store.dispatch('addFriends', itemid).then(response => {
         this.getDataFromServer();
       })
     },
-    mouseOver() {
+    blocked(itemid) {
+      this.$store.dispatch('blocked', itemid).then(response => {
+        this.getDataFromServer();
+      })
+    },
+    unblocked(itemid) {
+      this.$store.dispatch('unblocked', itemid).then(response => {
+        this.getDataFromServer();
+      })
+    },
+    sendRequest(itemid) {
+      this.$store.dispatch('sendRequest', itemid).then(response => {
+        this.getDataFromServer();
+      })
+    },
+    mouseOver(itemid) {
       this.cancel = !this.cancel;
     }
   },
