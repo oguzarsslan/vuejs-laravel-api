@@ -57,6 +57,7 @@
 import useVuelidate from '@vuelidate/core'
 import {required, email, minLength, maxLength} from '@vuelidate/validators'
 import router from "../../router";
+import {mapActions} from "vuex";
 
 export default {
   name: "Auth",
@@ -129,7 +130,7 @@ p {
   text-align: center;
 }
 
-.btn{
+.btn {
   min-inline-size: -webkit-fill-available;
 }
 </style>

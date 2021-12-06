@@ -18,17 +18,17 @@
             <li class="nav-item">
               <router-link to="/users" tag="a">Users</router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="!show">
               <router-link to="/login" tag="a">Auth</router-link>
-            </li>
-            <li class="nav-item">
-              <a href="#" @click.prevent="logout">Logout</a>
             </li>
             <li class="nav-item">
               <router-link to="/friends" tag="a">Friends</router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="show">
               <router-link to="/profile" tag="a">Profile</router-link>
+            </li>
+            <li class="nav-item" v-if="show">
+              <a href="#" @click.prevent="logout">Logout</a>
             </li>
           </ul>
           <form class="d-flex">
@@ -42,12 +42,12 @@
 </template>
 
 <script>
-import router from "../router";
-
 export default {
   name: "Header",
   data() {
-    return {}
+    return {
+      show : localStorage.getItem('token')
+    }
   },
   methods: {
     logout() {
