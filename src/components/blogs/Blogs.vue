@@ -83,7 +83,8 @@
                     <span class="float-end">Seen : {{ blog.seen }}</span>
                     <h5 class="card-title">{{ blog.title }}</h5>
                     <p class="card-text">{{ blog.body }}</p>
-                    <span>{{ blog.category }}</span>
+                    <p>{{ blog.category }}</p>
+                    <small>{{blog.users.name}}</small>
                     <router-link
                         class="btn btn-primary text-white"
                         tag="a"

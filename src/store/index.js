@@ -230,7 +230,7 @@ export default createStore({
                 // api.post('/getUser')
                 axios.get('http://127.0.0.1:8000/getUser', token)
                     .then(response => {
-                            let user = response.data
+                            let user = response.data[0]
                             commit("setAuthUser", user)
                             console.log(user)
                             resolve(response)

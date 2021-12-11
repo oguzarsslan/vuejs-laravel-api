@@ -49,13 +49,17 @@
                 <!--                  <input class="form-control" type="text" id="password" :value="getAuthUser.password">-->
                 <!--                </div>-->
                 <div class="offset-md-5 col-md-4 mb-3">
-                  <img :src="apiUrl + getAuthUser.images[0].image" class="card-img-top" alt="" v-if="getAuthUser.images[0]">
+                  <img :src="apiUrl + getAuthUser.images[0].image" class="card-img-top" alt=""
+                       v-if="getAuthUser.images[0]">
                   <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="" v-else>
                 </div>
                 <div class="col-md-3 mb-3">
                   <button class="btn btn-success text-right" @click="updateUser()">Update</button>
                 </div>
               </div>
+            </div>
+            <div class="col-md-4">
+              sa
             </div>
           </div>
         </div>
@@ -72,7 +76,7 @@ export default {
   data() {
     return {
       apiUrl: "http://127.0.0.1:8000/images/",
-      defaultprofilephoto : "defaultprofilephoto.jpg"
+      defaultprofilephoto: "defaultprofilephoto.jpg"
     }
   },
   methods: {

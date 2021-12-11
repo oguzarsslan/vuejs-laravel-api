@@ -3,7 +3,7 @@
     <div class="row justify-content-md-center">
       <div class="col-md-10">
         <div class="row mt-5 justify-content-md-center">
-          <div class="col-md-12 blogButton">
+          <div class="col-md-12 blogButton" v-if="auth">
             <button class="btn btn-info" @click="show = !show">
               {{ show ? 'Hide Form' : 'Update' }}
             </button>
@@ -61,7 +61,6 @@
                        v-if="item">
                   <a href="javascript:void(0)" @click="deleteImage(item.id)"><i class="bi bi-x"></i></a>
                 </div>
-
               </div>
             </div>
             <div v-if="!show">
@@ -75,6 +74,10 @@
               <p class="card-text">{{ getBlogDetail.data.body }}</p>
               <span>{{ getBlogDetail.data.category }}</span>
             </div>
+
+
+            <p>{{ this.getAuthUser.id }}</p>
+            <p> {{ this.getBlogDetail.data.user_id }}</p>
           </div>
         </div>
       </div>
@@ -93,7 +96,8 @@ export default {
       apiUrl: "http://127.0.0.1:8000/images/",
       id: this.$route.params.id,
       show: false,
-      blogImage: ""
+      blogImage: "",
+      authUser: false
     }
   },
   methods: {
@@ -133,14 +137,26 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "getBlogDetail"
+      "getBlogDetail",
+      "getAuthUser"
     ]),
     ...mapActions([
       "getBlogDetails",
+      "getUser"
     ]),
+    auth() {
+      let autUserID = this.getAuthUser.id
+      let blogID = this.getBlogDetail.data.user_id
+      if (autUserID == blogID) {
+        return this.authUser = true
+      } else {
+        return this.authUser = false
+      }
+    },
   },
   created() {
     this.$store.dispatch('getBlogDetails', this.id)
+    this.getUser;
   }
 }
 </script>
