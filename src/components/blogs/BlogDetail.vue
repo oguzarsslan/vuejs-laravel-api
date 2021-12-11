@@ -74,10 +74,19 @@
               <p class="card-text">{{ getBlogDetail.data.body }}</p>
               <span>{{ getBlogDetail.data.category }}</span>
             </div>
-
-
-            <p>{{ this.getAuthUser.id }}</p>
-            <p> {{ this.getBlogDetail.data.user_id }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mt-5">
+            sa
+          </div>
+          <div class="col-md-6 mt-5">
+            <div class="form-floating float-end">
+            <textarea class="form-control commentInput" placeholder="Leave a comment here"
+                      id="floatingTextarea"></textarea>
+              <label for="floatingTextarea">Comments</label>
+              <button class="btn btn-primary mt-2 float-end" @click="setComment()">Send</button>
+            </div>
           </div>
         </div>
       </div>
@@ -133,6 +142,9 @@ export default {
       setTimeout(() => {
         this.$swal('the picture was deleted');
       }, 500)
+    },
+    setComment(){
+      console.log(1)
     }
   },
   computed: {
@@ -172,5 +184,10 @@ export default {
 
 .updateButton {
   text-align: right;
+}
+
+.commentInput {
+  width: 500px;
+  height: 100px !important;
 }
 </style>

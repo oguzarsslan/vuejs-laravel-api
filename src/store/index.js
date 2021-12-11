@@ -531,6 +531,23 @@ export default createStore({
                     )
             })
         },
+        setComment({commit}, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('http://127.0.0.1:8000/setComment', data, token)
+                    .then(response => {
+                            console.log(response.data)
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            console.log(error)
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
     },
     modules: {}
 })

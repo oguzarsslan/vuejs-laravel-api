@@ -38,9 +38,8 @@
                 <div class="col-md-5 mb-3">
                   <label class="col-form-label" for="email">Avatar</label>
                 </div>
-
                 <div class="col-md-7 mb-3">
-                  <input class="form-control" id="files" type="file" ref="files" @change="uploadImage()">
+                  <input class="form-control" id="files" type="file" ref="files">
                 </div>
                 <!--                <div class="col-md-5 mb-3">-->
                 <!--                  <label class="col-form-label" for="password">Password</label>-->
@@ -57,9 +56,6 @@
                   <button class="btn btn-success text-right" @click="updateUser()">Update</button>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              sa
             </div>
           </div>
         </div>
