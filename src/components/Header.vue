@@ -46,7 +46,7 @@ export default {
   name: "Header",
   data() {
     return {
-      show : localStorage.getItem('token')
+      show: localStorage.getItem('token')
     }
   },
   methods: {

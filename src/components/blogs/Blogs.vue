@@ -75,18 +75,19 @@
           </div>
           <div class="col-md-10">
             <div class="row justify-content-md">
-              <div class="col-md-3 mb-3" v-for="(blog) in getBlog.data">
+              <div class="col-md-3 mb-3" v-for="blog in getBlog.data">
                 <div class="card" style="width: 18rem;">
-                  <img :src="apiUrl + blog.images[0].image" class="card-img-top" alt="">
+                  <img :src="apiUrl + blog.images[0].image" class="card-img-top" alt="" v-if="blog.images[0]">
+                  <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="" v-else>
                   <div class="card-body">
+                    <span class="float-end">Seen : {{ blog.seen }}</span>
                     <h5 class="card-title">{{ blog.title }}</h5>
                     <p class="card-text">{{ blog.body }}</p>
                     <span>{{ blog.category }}</span>
                     <router-link
                         class="btn btn-primary text-white"
                         tag="a"
-                        :to="{name: 'BlogDetail', params: {id: blog.id} }"
-                    >
+                        :to="{name: 'BlogDetail', params: {id: blog.id} }">
                       Details
                     </router-link>
                   </div>
@@ -120,7 +121,8 @@ export default {
         images: ""
       },
       show: false,
-      apiUrl: "http://127.0.0.1:8000/images/"
+      apiUrl: "http://127.0.0.1:8000/images/",
+      defaultprofilephoto : "defaultprofilephoto.jpg"
     }
   },
   validations() {

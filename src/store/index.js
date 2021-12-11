@@ -136,7 +136,6 @@ export default createStore({
                         }
                     )
                     .catch(function (error) {
-                            // console.log(error.data)
                             reject(error)
                             return error
                         }
@@ -319,6 +318,61 @@ export default createStore({
                             commit("setBlogDetail", blogDetail)
                             console.log(blogDetail)
                             resolve(response)
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        updateBlog({commit}, blog) {
+            return new Promise((resolve, reject) => {
+                axios.post('http://127.0.0.1:8000/updateBlog', blog, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    }
+                })
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            console.log(error)
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        deleteBlog({commit}, blogID) {
+            return new Promise((resolve, reject) => {
+                api.post('/deleteBlog', {id: blogID},
+                    token
+                )
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        deleteImage({commit}, imageID) {
+            return new Promise((resolve, reject) => {
+                api.post('/deleteImage', {id: imageID},
+                    token
+                )
+                    .then(response => {
+                            resolve(response)
+                            return response
                         }
                     )
                     .catch(function (error) {

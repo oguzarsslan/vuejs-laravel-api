@@ -50,7 +50,6 @@
                 <!--                </div>-->
                 <div class="offset-md-5 col-md-4 mb-3">
                   <img :src="apiUrl + getAuthUser.images[0].image" class="card-img-top" alt="" v-if="getAuthUser.images[0]">
-                  <img :src="apiUrl + getAuthUser.images[0].image" class="card-img-top" alt="" v-if="getAuthUser.images[0]">
                   <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="" v-else>
                 </div>
                 <div class="col-md-3 mb-3">
