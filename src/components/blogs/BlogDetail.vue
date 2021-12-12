@@ -88,10 +88,13 @@
                     <cite title="Source Title">{{ item.user_id }}</cite>
                   </figcaption>
                 </figure>
-                <button class="btn-xs btn-danger float-end" @click="deleteComment(item.id)"><i class="bi bi-x"></i></button>
-                <button class="btn-xs btn-success float-end" @click="updateComment = !updateComment">
-                  <i class="bi" :class="updateComments"></i>
-                </button>
+                <div>
+                  <button class="btn-xs btn-danger float-end" @click="deleteComment(item.id)"><i class="bi bi-x"></i>
+                  </button>
+                  <button class="btn-xs btn-success float-end" @click="updateComment = !updateComment">
+                    <i class="bi" :class="updateComments"></i>
+                  </button>
+                </div>
                 <div class="form-floating float-end" v-if="updateComment">
                 <textarea class="form-control commentInput"
                           id="floatingTextarea1"
@@ -150,6 +153,7 @@ export default {
       updateComment: false,
       blogImage: "",
       authUser: false,
+      authUserComment: false,
       comment: "",
       commentUpdate: ""
     }
@@ -224,7 +228,7 @@ export default {
         this.$swal('comment updated');
       }, 500)
     },
-    deleteComment(id){
+    deleteComment(id) {
       this.$store.dispatch('deleteComment', id);
       this.$store.dispatch('getBlogDetails', this.id);
       setTimeout(() => {

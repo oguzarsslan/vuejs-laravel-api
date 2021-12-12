@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       user: {
+        name: "",
         email: "",
         password: ""
       },
@@ -104,6 +105,9 @@ export default {
         router.push("/")
         this.$store.state.message = ""
       } else {
+        let name = this.user.email.split('@');
+        this.user.name = name[0]
+
         this.$store.dispatch('setDataToServer', this.user)
         this.isUser = true
         this.user.email = ""
