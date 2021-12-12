@@ -105,7 +105,7 @@
 <script>
 import {mapActions} from "vuex";
 import {mapGetters} from "vuex";
-import {email, maxLength, minLength, required} from "@vuelidate/validators";
+import {maxLength, minLength, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 
 export default {

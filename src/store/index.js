@@ -533,7 +533,12 @@ export default createStore({
         },
         setComment({commit}, data) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/setComment', data, token)
+                axios.post('http://127.0.0.1:8000/setComment', data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    }
+                })
                     .then(response => {
                             console.log(response.data)
                             resolve(response)
@@ -542,6 +547,43 @@ export default createStore({
                     )
                     .catch(function (error) {
                             console.log(error)
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        upComment({commit}, data) {
+            return new Promise((resolve, reject) => {
+                axios.post('http://127.0.0.1:8000/upComment', data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    }
+                })
+                    .then(response => {
+                            console.log(response.data)
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            console.log(error)
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        deleteComment({commit}, userid) {
+            return new Promise((resolve, reject) => {
+                api.post('/deleteComment', {id: userid}, token)
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
                             reject(error)
                             return error
                         }

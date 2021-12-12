@@ -78,12 +78,49 @@
         </div>
         <div class="row">
           <div class="col-md-6 mt-5">
-            sa
+            <div class="row">
+              <div class="col-md-12" v-for="item in getBlogDetail.data.comments">
+                <figure class="text-center">
+                  <blockquote class="blockquote">
+                    <p>{{ item.comment }}</p>
+                  </blockquote>
+                  <figcaption class="blockquote-footer">
+                    <cite title="Source Title">{{ item.user_id }}</cite>
+                  </figcaption>
+                </figure>
+                <button class="btn-xs btn-danger float-end" @click="deleteComment(item.id)"><i class="bi bi-x"></i></button>
+                <button class="btn-xs btn-success float-end" @click="updateComment = !updateComment">
+                  <i class="bi" :class="updateComments"></i>
+                </button>
+                <div class="form-floating float-end" v-if="updateComment">
+                <textarea class="form-control commentInput"
+                          id="floatingTextarea1"
+                          v-model="commentUpdate"
+                          :class="{'is-invalid' : v$.commentUpdate.$error}"
+                          @blur="v$.commentUpdate.$touch()"></textarea>
+                  <small>
+                    <div class="input-errors" v-for="(error, index) of v$.commentUpdate.$errors" :key="index">
+                      <div class="error-msg text-danger mb-1">{{ error.$message }}</div>
+                    </div>
+                  </small>
+                  <label for="floatingTextarea1">Comments</label>
+                  <button class="btn btn-primary mt-2 float-end" @click="upComment(item.id)">Update</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="col-md-6 mt-5">
             <div class="form-floating float-end">
-            <textarea class="form-control commentInput" placeholder="Leave a comment here"
-                      id="floatingTextarea"></textarea>
+            <textarea class="form-control commentInput"
+                      id="floatingTextarea"
+                      v-model="comment"
+                      :class="{'is-invalid' : v$.comment.$error}"
+                      @blur="v$.comment.$touch()"></textarea>
+              <small>
+                <div class="input-errors" v-for="(error, index) of v$.comment.$errors" :key="index">
+                  <div class="error-msg text-danger mb-1">{{ error.$message }}</div>
+                </div>
+              </small>
               <label for="floatingTextarea">Comments</label>
               <button class="btn btn-primary mt-2 float-end" @click="setComment()">Send</button>
             </div>
@@ -97,16 +134,38 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import router from "../../router";
+import {maxLength, minLength, required} from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
 
 export default {
   name: "BlogDetail",
+  setup() {
+    return {v$: useVuelidate()}
+  },
   data() {
     return {
       apiUrl: "http://127.0.0.1:8000/images/",
       id: this.$route.params.id,
       show: false,
+      updateComment: false,
       blogImage: "",
-      authUser: false
+      authUser: false,
+      comment: "",
+      commentUpdate: ""
+    }
+  },
+  validations() {
+    return {
+      comment: {
+        required,
+        minLength: minLength(5),
+        maxLength: maxLength(255)
+      },
+      commentUpdate: {
+        required,
+        minLength: minLength(5),
+        maxLength: maxLength(255)
+      }
     }
   },
   methods: {
@@ -118,10 +177,10 @@ export default {
     updateBlog() {
       this.uploadImages();
       let data = new FormData();
-      data.append('blogId', this.getBlogDetail.data.id)
-      data.append('title', this.getBlogDetail.data.title)
-      data.append('body', this.getBlogDetail.data.body)
-      data.append('category', this.getBlogDetail.data.category)
+      data.append('blogId', this.id);
+      data.append('title', this.getBlogDetail.data.title);
+      data.append('body', this.getBlogDetail.data.body);
+      data.append('category', this.getBlogDetail.data.category);
 
       for (let i = 0; i < this.blogImage.length; i++) {
         let image = this.blogImage [i];
@@ -131,20 +190,46 @@ export default {
       console.log(data)
       this.$store.dispatch('updateBlog', data);
       this.show = false
-      this.$store.dispatch('getBlogDetails', this.id)
+      this.$store.dispatch('getBlogDetails', this.id);
     },
     uploadImages() {
       this.blogImage = this.$refs.files.files;
     },
     deleteImage(data) {
-      this.$store.dispatch('deleteImage', data)
-      this.$store.dispatch('getBlogDetails', this.id)
+      this.$store.dispatch('deleteImage', data);
+      this.$store.dispatch('getBlogDetails', this.id);
       setTimeout(() => {
         this.$swal('the picture was deleted');
       }, 500)
     },
-    setComment(){
-      console.log(1)
+    setComment() {
+      let data = new FormData();
+      data.append('user_id', this.getAuthUser.id);
+      data.append('blog_id', this.id);
+      data.append('comment', this.comment);
+      this.$store.dispatch('setComment', data);
+      this.comment = ""
+      this.$store.dispatch('getBlogDetails', this.id);
+      console.log(data)
+    },
+    upComment(id) {
+      let data = new FormData();
+      data.append('id', id);
+      data.append('comment', this.commentUpdate);
+      console.log(data)
+      this.$store.dispatch('upComment', data);
+      this.updateComment = false
+      this.$store.dispatch('getBlogDetails', this.id);
+      setTimeout(() => {
+        this.$swal('comment updated');
+      }, 500)
+    },
+    deleteComment(id){
+      this.$store.dispatch('deleteComment', id);
+      this.$store.dispatch('getBlogDetails', this.id);
+      setTimeout(() => {
+        this.$swal('comment deleted');
+      }, 500)
     }
   },
   computed: {
@@ -165,9 +250,12 @@ export default {
         return this.authUser = false
       }
     },
+    updateComments() {
+      return this.updateComment ? "bi-arrow-bar-up" : "bi-arrow-clockwise"
+    }
   },
   created() {
-    this.$store.dispatch('getBlogDetails', this.id)
+    this.$store.dispatch('getBlogDetails', this.id);
     this.getUser;
   }
 }
