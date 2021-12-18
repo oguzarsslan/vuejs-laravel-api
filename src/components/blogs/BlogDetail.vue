@@ -11,7 +11,6 @@
           </div>
           <div class="col-md-10">
             <div class="row justify-content-md">
-
               <div class="row mb-5 mt-5 blogForm" v-if="show">
                 <div class="col-md-5 mb-3">
                   <label class="col-form-label" for="title">Title</label>
@@ -73,6 +72,8 @@
               <h5 class="card-title">{{ getBlogDetail.data.title }}</h5>
               <p class="card-text">{{ getBlogDetail.data.body }}</p>
               <span>{{ getBlogDetail.data.category }}</span>
+              <br><br>
+              <span class="keyword" v-for="keyword in getBlogDetail.data.keywords.split(',')">{{keyword}}</span>
             </div>
           </div>
         </div>
@@ -281,5 +282,13 @@ export default {
 .commentInput {
   width: 500px;
   height: 100px !important;
+}
+
+.keyword{
+  background-color: lightslategrey;
+  color: white;
+  padding: 7px;
+  border-radius: 10px;
+  margin-right: 5px;
 }
 </style>

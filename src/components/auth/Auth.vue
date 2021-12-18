@@ -101,12 +101,19 @@ export default {
     },
     setData() {
       if (this.isUser) {
-        this.$store.dispatch('loginUser', this.user)
-        router.push("/")
-        this.$store.state.message = ""
-        setTimeout(() => {
-          location.reload();
-        }, 1000)
+        this.$store.dispatch('loginUser', this.user).then(response => {
+          router.push("/")
+          this.$store.state.message = ""
+          setTimeout(() => {
+            location.reload();
+          }, 1000)
+        }).catch(function (error) {
+          setTimeout(() => {
+            router.push("/login")
+            console.log(error.data)
+          }, 1000)
+            }
+        )
       } else {
         let name = this.user.email.split('@');
         this.user.name = name[0]

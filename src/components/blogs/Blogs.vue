@@ -50,6 +50,27 @@
                 </small>
               </div>
               <div class="col-md-5 mb-3">
+                <label class="col-form-label" for="keywords">Keywords</label>
+              </div>
+              <div class="col-md-7 mb-3">
+                <div class="tag-container">
+                  <span class="tag" v-for="(keyword, index) in blog.keywords">
+                    <span class="content">{{ keyword }}</span>
+                    <span class="close" @click="removeOneKeyword(index)">x</span>
+                  </span>
+                  <input
+                      class="form-control keywordsInput mt-3"
+                      type="text"
+                      id="keywords"
+                      @keydown.enter="addKeywords"
+                      @keydown.backspace="removeKeyword"
+                  >
+                  <small v-if="keywordError">
+                    <div class="error-msg text-danger mb-1">eklenmiş</div>
+                  </small>
+                </div>
+              </div>
+              <div class="col-md-5 mb-3">
                 <label class="col-form-label">Body</label>
               </div>
               <div class="col-md-7 mb-3">
@@ -122,12 +143,14 @@ export default {
         title: "",
         body: "",
         category: "",
+        keywords: [],
         images: ""
       },
       show: false,
       apiUrl: "http://127.0.0.1:8000/images/",
       defaultprofilephoto: "defaultprofilephoto.jpg",
-      search: null
+      search: null,
+      keywordError: false
     }
   },
   validations() {
@@ -159,6 +182,7 @@ export default {
       data.append('title', this.blog.title)
       data.append('body', this.blog.body)
       data.append('category', this.blog.category)
+      data.append('keywords', this.blog.keywords)
 
       for (let i = 0; i < this.blog.images.length; i++) {
         let image = this.blog.images [i];
@@ -174,6 +198,34 @@ export default {
     uploadImages() {
       this.blog.images = this.$refs.files.files;
     },
+    addKeywords(event) {
+      let text = event.target
+      let matched = false
+      if (text.value.length > 0) {
+        this.blog.keywords.forEach(keyword => {
+          if (keyword.toLowerCase() === text.value.toLowerCase()) {
+            matched = true
+          }
+        })
+        if (!matched) {
+          this.blog.keywords.push(text.value)
+          text.value = ""
+        } else {
+          this.keywordError = true
+          setTimeout(() => {
+            this.keywordError = false
+          }, 2000)
+        }
+      }
+    },
+    removeKeyword(e) {
+      if (e.target.value.length <= 0) {
+        this.blog.keywords.splice(this.blog.keywords.length - 1, 1)
+      }
+    },
+    removeOneKeyword(index) {
+      this.blog.keywords.splice(index, 1)
+    }
   },
   computed: {
     ...mapGetters([
@@ -217,5 +269,33 @@ export default {
 .card img {
   height: 175px;
   object-fit: scale-down;
+}
+
+.tag {
+  background-color: #fbbd08;
+  padding: 7px;
+  color: #000;
+  cursor: default;
+  margin-right: 5px;
+  border-radius: 10px;
+}
+
+.tag * {
+  font-size: 14px;
+}
+
+.tag .close {
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.close {
+  margin-left: 5px;
+  border-style: inset;
+  border-color: red;
+  background: red;
+  color: white;
+  border-radius: 5px;
 }
 </style>
