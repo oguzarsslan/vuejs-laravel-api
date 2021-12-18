@@ -43,6 +43,9 @@ export default {
     unblocked(itemid) {
       this.$store.dispatch('unblocked', itemid).then(response => {
         this.getBlockeds();
+        setTimeout(() => {
+          this.$swal('user is unblocked');
+        }, 500)
       })
     }
   },

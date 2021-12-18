@@ -116,7 +116,7 @@ export default createStore({
             return new Promise((resolve) => {
                 api.get('/get', token)
                     .then(response => {
-                            commit('setData', response)
+                            commit('setData', response.data)
                             console.log(response)
                             resolve(response)
                         }
@@ -292,7 +292,7 @@ export default createStore({
             return new Promise((resolve, reject) => {
                 api.get('/getBlogs', token)
                     .then(response => {
-                            let blogs = response
+                            let blogs = response.data
                             commit("setBlogs", blogs)
                             console.log(blogs)
                             resolve(response)

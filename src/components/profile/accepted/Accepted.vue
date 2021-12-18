@@ -43,6 +43,9 @@ export default {
     removeFriend(itemid) {
       this.$store.dispatch('removeFriend', itemid).then(response => {
         this.getFriends();
+        setTimeout(() => {
+          this.$swal('it is cancelled');
+        }, 500)
       })
     }
   },

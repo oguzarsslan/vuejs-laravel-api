@@ -45,11 +45,17 @@ export default {
     addFriends(itemid) {
       this.$store.dispatch('addFriends', itemid).then(response => {
         this.getFriendRequests();
+        setTimeout(() => {
+          this.$swal('request accepted');
+        }, 500)
       })
     },
     removeFriend(itemid) {
       this.$store.dispatch('removeFriend', itemid).then(response => {
         this.getFriendRequests();
+        setTimeout(() => {
+          this.$swal('it is cancelled');
+        }, 500)
       })
     }
   },

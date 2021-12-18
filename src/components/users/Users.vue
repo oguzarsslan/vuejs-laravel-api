@@ -3,6 +3,9 @@
     <div class="row">
       <div class="col-md-12">
         <div class="row mt-5 justify-content-md-center">
+          <div class="col-md-5 mb-3">
+            <input class="form-control me-2" type="search" placeholder="Search" v-model="search">
+          </div>
           <div class="col-md-8">
             <table class="table">
               <thead>
@@ -14,7 +17,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="item in getData.data">
+              <tr v-for="item in resultQuery">
                 <th scope="row">{{ item.id }}</th>
                 <td>{{ item.name }}</td>
                 <td>{{ item.email }}</td>
@@ -89,7 +92,8 @@ export default {
   name: "Users",
   data() {
     return {
-      cancel: false
+      cancel: false,
+      search: null,
     }
   },
   components: {Profile},
@@ -101,34 +105,52 @@ export default {
     deleteUser(itemid) {
       this.$store.dispatch('deleteUser', itemid).then(response => {
         this.getDataFromServer();
+        setTimeout(() => {
+          this.$swal('user deleted');
+        }, 500)
       })
     },
     removeFriend(itemid) {
       this.$store.dispatch('removeFriend', itemid).then(response => {
         this.getDataFromServer();
+        setTimeout(() => {
+          this.$swal('it is cancelled');
+        }, 500)
       })
     },
     addFriends(itemid) {
       this.$store.dispatch('addFriends', itemid).then(response => {
         this.getDataFromServer();
+        setTimeout(() => {
+          this.$swal('request accepted');
+        }, 500)
       })
     },
     blocked(itemid) {
       this.$store.dispatch('blocked', itemid).then(response => {
         this.getDataFromServer();
+        setTimeout(() => {
+          this.$swal('user is blocked');
+        }, 500)
       })
     },
     unblocked(itemid) {
       this.$store.dispatch('unblocked', itemid).then(response => {
         this.getDataFromServer();
+        setTimeout(() => {
+          this.$swal('user is unblocked');
+        }, 500)
       })
     },
     sendRequest(itemid) {
       this.$store.dispatch('sendRequest', itemid).then(response => {
         this.getDataFromServer();
+        setTimeout(() => {
+          this.$swal('request sent');
+        }, 500)
       })
     },
-    mouseOver(itemid) {
+    mouseOver() {
       this.cancel = !this.cancel;
     }
   },
@@ -139,7 +161,19 @@ export default {
     ]),
     ...mapActions([
       "getUser",
-    ])
+    ]),
+    resultQuery() {
+      if (this.search) {
+        return this.getData.filter(item => {
+          return this.search
+              .toLowerCase()
+              .split(" ")
+              .every(v => item.name.toLowerCase().includes(v));
+        });
+      } else {
+        return this.getData;
+      }
+    }
   },
   created() {
     this.getDataFromServer();

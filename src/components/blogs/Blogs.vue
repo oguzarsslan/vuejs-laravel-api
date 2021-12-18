@@ -6,7 +6,10 @@
           {{ show ? 'Hide Form' : 'Create Blog' }}
         </button>
         <div class="row mt-5 justify-content-md-center">
-          <div class="col-md-6">
+          <div class="col-md-5 mb-3">
+            <input class="form-control me-2" type="search" placeholder="Search" v-model="search" v-if="!show">
+          </div>
+          <div class="col-md-8">
             <div class="row mb-5 blogForm" v-if="show">
               <div class="col-md-5 mb-3">
                 <label class="col-form-label" for="title">Title</label>
@@ -75,7 +78,7 @@
           </div>
           <div class="col-md-10">
             <div class="row justify-content-md">
-              <div class="col-md-3 mb-3" v-for="blog in getBlog.data">
+              <div class="col-md-3 mb-3" v-for="blog in resultQuery">
                 <div class="card" style="width: 18rem;">
                   <img :src="apiUrl + blog.images[0].image" class="card-img-top" alt="" v-if="blog.images[0]">
                   <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="" v-else>
@@ -84,7 +87,7 @@
                     <h5 class="card-title">{{ blog.title }}</h5>
                     <p class="card-text">{{ blog.body }}</p>
                     <p>{{ blog.category }}</p>
-                    <small>{{blog.users.name}}</small>
+                    <small>{{ blog.users.name }}</small>
                     <router-link
                         class="btn btn-primary text-white"
                         tag="a"
@@ -123,7 +126,8 @@ export default {
       },
       show: false,
       apiUrl: "http://127.0.0.1:8000/images/",
-      defaultprofilephoto : "defaultprofilephoto.jpg"
+      defaultprofilephoto: "defaultprofilephoto.jpg",
+      search: null
     }
   },
   validations() {
@@ -174,7 +178,19 @@ export default {
   computed: {
     ...mapGetters([
       "getBlog"
-    ])
+    ]),
+    resultQuery() {
+      if (this.search) {
+        return this.getBlog.filter(item => {
+          return this.search
+              .toLowerCase()
+              .split(" ")
+              .every(v => item.title.toLowerCase().includes(v));
+        });
+      } else {
+        return this.getBlog;
+      }
+    },
   },
   created() {
     this.getBlogs();
