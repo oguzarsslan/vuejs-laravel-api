@@ -244,6 +244,21 @@ export default createStore({
                     )
             })
         },
+        deleteProfilePhoto({commit}) {
+            return new Promise((resolve, reject) => {
+                api.get('/deleteProfilePhoto', token)
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
         updateUser({commit}, user) {
             return new Promise((resolve, reject) => {
                 axios.post('http://127.0.0.1:8000/updateUser', user, {
@@ -252,6 +267,22 @@ export default createStore({
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     }
                 })
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            console.log(error)
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        updatePassword({commit}, password) {
+            return new Promise((resolve, reject) => {
+                api.post('/updatePassword', password, token)
                     .then(response => {
                             resolve(response)
                             return response
