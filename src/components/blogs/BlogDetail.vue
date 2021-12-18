@@ -73,7 +73,7 @@
               <p class="card-text">{{ getBlogDetail.data.body }}</p>
               <span>{{ getBlogDetail.data.category }}</span>
               <br><br>
-              <span class="keyword" v-for="keyword in getBlogDetail.data.keywords.split(',')">{{keyword}}</span>
+              <span class="keyword" v-for="keyword in getBlogDetail.data.keywords.split(',')">{{ keyword }}</span>
             </div>
           </div>
         </div>
@@ -284,7 +284,7 @@ export default {
   height: 100px !important;
 }
 
-.keyword{
+.keyword {
   background-color: lightslategrey;
   color: white;
   padding: 7px;
