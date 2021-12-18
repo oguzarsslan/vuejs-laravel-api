@@ -22,6 +22,7 @@ export default createStore({
         FriendsRequest: "",
         FriendSent: "",
         Blocked: "",
+        UsersBlogs: ""
     },
     getters: {
         getData(state) {

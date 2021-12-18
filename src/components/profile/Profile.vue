@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="row mt-5 justify-content-md-center">
-            <div class="col-md-4">
+            <div class="col-md-8 mb-5">
               <div class="row">
                 <div class="col-md-5 mb-3">
                   <label class="col-form-label" for="created_at">Created At Date</label>
@@ -56,6 +56,33 @@
                   <button class="btn btn-success text-right" @click="updateUser()">Update</button>
                 </div>
               </div>
+            </div>
+            <div class="col-md-5">
+              <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item" v-for="item in getAuthUser.blogs">
+                  <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                      {{ item.title }}
+                    </button>
+                  </h2>
+                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                       data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                      {{ item.body }} ->  <router-link :to="{ path: '/blog/' + item.id }" tag="a">Blog URL
+                    </router-link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <ul v-for="item in getAuthUser.comments">
+                <li> {{ item.comment }} ->
+                  <router-link :to="{ path: '/blog/' + item.blog_id }" tag="a">Blog URL
+                  </router-link>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

@@ -57,6 +57,7 @@
 import useVuelidate from '@vuelidate/core'
 import {required, email, minLength, maxLength} from '@vuelidate/validators'
 import router from "../../router";
+import {mapActions} from "vuex";
 
 export default {
   name: "Auth",
@@ -104,6 +105,9 @@ export default {
         this.$store.dispatch('loginUser', this.user)
         router.push("/")
         this.$store.state.message = ""
+        setTimeout(() => {
+          location.reload();
+        }, 1000)
       } else {
         let name = this.user.email.split('@');
         this.user.name = name[0]
@@ -117,7 +121,10 @@ export default {
         }, 500)
       }
     }
-  }
+  },
+  computed: {
+    ...mapActions([])
+  },
 }
 </script>
 

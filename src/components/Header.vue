@@ -52,6 +52,10 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("logoutUser")
+      setTimeout(() => {
+        location.reload();
+      }, 1000)
+
     }
   }
 }
