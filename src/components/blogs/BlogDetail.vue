@@ -266,6 +266,8 @@ export default {
         this.$swal('comment deleted');
       }, 500)
     },
+
+    //keywords
     addKeywords(event) {
       let text = event.target
       let matched = false
@@ -294,6 +296,8 @@ export default {
     removeOneKeyword(index) {
       this.getBlogDetail.keywords.splice(index, 1)
     }
+    //keywords
+
   },
   computed: {
     ...mapGetters([

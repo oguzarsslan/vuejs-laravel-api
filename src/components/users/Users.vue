@@ -32,12 +32,12 @@
                 </td>
                 <td v-if="item.status === 'accepted'">
                   <button class="btn-xs btn-success"
-                          :class="{'btn-danger' : cancel}"
-                          @mouseover="mouseOver()"
-                          @mouseleave="mouseOver()"
+                          :class="cancel === item.id ? 'btn-danger' : ''"
+                          @mouseover="cancel = item.id"
+                          @mouseleave="cancel = false"
                           @click="removeFriend(item.id)"
                   >
-                    {{ cancel ? 'Remove' : 'Friend' }}
+                    {{ cancel === item.id ? 'Remove' : 'Friend' }}
                   </button>
                 </td>
                 <td v-else-if="item.status === 'pending' && item.sender_id === item.id">
@@ -47,22 +47,22 @@
                 <td v-else-if="item.status === 'pending'">
                   <button class="btn-xs btn-info"
                           :id="item.id"
-                          :class="{'btn-danger' : cancel}"
-                          @mouseover="mouseOver()"
-                          @mouseleave="mouseOver()"
+                          :class="cancel === item.id ? 'btn-danger' : ''"
+                          @mouseover="cancel = item.id"
+                          @mouseout="cancel = false"
                           @click="removeFriend(item.id)"
                   >
-                    {{ cancel ? 'Cancel' : 'Pending' }}
+                    {{ cancel === item.id ? 'Cancel' : 'Pending' }}
                   </button>
                 </td>
                 <td v-else-if="item.status === 'blocked' && item.recipient_id === item.id">
                   <button class="btn-xs"
-                          :class="{'btn-danger' : cancel, 'btn-warning' : !cancel}"
-                          @mouseover="mouseOver()"
-                          @mouseleave="mouseOver()"
+                          :class="cancel === item.id ? 'btn-danger' : 'btn-warning'"
+                          @mouseover="cancel = item.id"
+                          @mouseout="cancel = false"
                           @click="unblocked(item.id)"
                   >
-                    {{ cancel ? 'Unblocked' : 'Blocked' }}
+                    {{ cancel === item.id ? 'Unblocked' : 'Blocked' }}
                   </button>
                 </td>
                 <td v-else-if="item.status === 'blocked'">
@@ -150,8 +150,10 @@ export default {
         }, 500)
       })
     },
-    mouseOver() {
-      this.cancel = !this.cancel;
+    mouseOver(data) {
+      if (data) {
+        this.cancel = !this.cancel;
+      }
     }
   },
   computed: {
