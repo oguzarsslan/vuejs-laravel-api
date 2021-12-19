@@ -101,6 +101,8 @@
           <div class="col-md-10">
             <div class="row justify-content-md">
               <div class="col-md-3 mb-3" v-for="blog in resultQuery">
+
+
                 <div class="card" style="width: 18rem;">
                   <img :src="apiUrl + blog.images[0].image" class="card-img-top" alt="" v-if="blog.images[0]">
                   <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="" v-else>

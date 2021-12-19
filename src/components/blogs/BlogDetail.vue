@@ -78,19 +78,25 @@
                 </div>
                 <div class="col-md-3 mb-3" v-for="item in getBlogDetail.images">
                   <img :src="apiUrl + item.image" class="card-img-top" alt=""
-                       v-if="item.image">
+                       v-if="getBlogDetail.images">
                   <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="" v-else>
                   <a href="javascript:void(0)" @click="deleteImage(item.id)"><i class="bi bi-x"></i></a>
                 </div>
               </div>
             </div>
             <div v-if="!show">
-              <div class="col-md-3 mb-3" v-for="item in getBlogDetail.images">
+              <div class="col-md-3 mb-3" v-for="item in getBlogDetail.images" v-if="getBlogDetail.images[0]">
                 <div class="card">
                   <img :src="apiUrl + item.image" class="card-img-top" alt="">
                 </div>
-                <a href="javascript:void(0)" @click="deleteImage(item.id)"><i class="bi bi-x"></i></a>
+                <a href="javascript:void(0)" @click="deleteImage(item.id)" v-if="auth"><i class="bi bi-x"></i></a>
               </div>
+              <div class="col-md-3 mb-3" v-else>
+                <div class="card">
+                  <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="">
+                </div>
+              </div>
+
               <h5 class="card-title">{{ getBlogDetail.title }}</h5>
               <p class="card-text">{{ getBlogDetail.body }}</p>
               <span>{{ getBlogDetail.category }}</span>
@@ -99,7 +105,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="!show">
           <div class="col-md-6 mt-5">
             <div class="row">
               <div class="col-md-12" v-for="item in getBlogDetail.comments">
