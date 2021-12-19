@@ -66,7 +66,7 @@
                       @keydown.backspace="removeKeyword"
                   >
                   <small v-if="keywordError">
-                    <div class="error-msg text-danger mb-1">eklenmiş</div>
+                    <div class="error-msg text-danger mb-1">already added</div>
                   </small>
                 </div>
               </div>
@@ -97,6 +97,7 @@
               </div>
             </div>
           </div>
+
           <div class="col-md-10">
             <div class="row justify-content-md">
               <div class="col-md-3 mb-3" v-for="blog in resultQuery">
@@ -109,6 +110,10 @@
                     <p class="card-text">{{ blog.body }}</p>
                     <p>{{ blog.category }}</p>
                     <small>{{ blog.users.name }}</small>
+                    <div class="favorites">
+                      <a href="javascript:(0)" @click="favorited(blog.id)" v-if="blog.favorites[0] == null || blog.favorites[0].favorite === 0"><i class="bi bi-heart"></i></a>
+                      <a href="javascript:(0)" @click="unfavorited(blog.id)" v-else><i class="bi bi-heart-fill"></i></a>
+                    </div>
                     <router-link
                         class="btn btn-primary text-white"
                         tag="a"
@@ -197,6 +202,14 @@ export default {
     },
     uploadImages() {
       this.blog.images = this.$refs.files.files;
+    },
+    favorited(blogID) {
+      this.$store.dispatch('favorited', blogID);
+      this.getBlogs()
+    },
+    unfavorited(blogID) {
+      this.$store.dispatch('unfavorited', blogID);
+      this.getBlogs()
     },
     addKeywords(event) {
       let text = event.target

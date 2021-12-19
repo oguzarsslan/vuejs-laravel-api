@@ -20,7 +20,7 @@
                       class="form-control"
                       type="text"
                       id="title"
-                      v-model="getBlogDetail.data.title"
+                      v-model="getBlogDetail.title"
                   >
                 </div>
                 <div class="col-md-5 mb-3">
@@ -30,11 +30,32 @@
                   <select class="form-select"
                           id="category"
                           aria-label="Floating label select example"
-                          v-model="getBlogDetail.data.category">
+                          v-model="getBlogDetail.category">
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
                   </select>
+                </div>
+                <div class="col-md-5 mb-3">
+                  <label class="col-form-label" for="keywords">Keywords</label>
+                </div>
+                <div class="col-md-7 mb-3">
+                  <div class="tag-container">
+                  <span class="tag" v-for="(keyword, index) in getBlogDetail.keywords.split(',')">
+                    <span class="content">{{ keyword }}</span>
+                    <span class="close" @click="removeOneKeyword(index)">x</span>
+                  </span>
+                    <input
+                        class="form-control keywordsInput mt-3"
+                        type="text"
+                        id="keywords"
+                        @keydown.enter="addKeywords"
+                        @keydown.backspace="removeKeyword"
+                    >
+                    <small v-if="keywordError">
+                      <div class="error-msg text-danger mb-1">already added</div>
+                    </small>
+                  </div>
                 </div>
                 <div class="col-md-5 mb-3">
                   <label class="col-form-label">Body</label>
@@ -43,7 +64,7 @@
                 <textarea
                     class="form-control"
                     id="body" rows="4"
-                    v-model="getBlogDetail.data.body">
+                    v-model="getBlogDetail.body">
                 </textarea>
                 </div>
                 <div class="col-md-5 mb-3">
@@ -55,32 +76,33 @@
                 <div class="offset-md-9 col-md-3 mb-3 updateButton">
                   <button class="btn btn-success text-right" @click="updateBlog()">Update</button>
                 </div>
-                <div class="col-md-3 mb-3" v-for="item in getBlogDetail.data.images">
+                <div class="col-md-3 mb-3" v-for="item in getBlogDetail.images">
                   <img :src="apiUrl + item.image" class="card-img-top" alt=""
-                       v-if="item">
+                       v-if="item.image">
+                  <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="" v-else>
                   <a href="javascript:void(0)" @click="deleteImage(item.id)"><i class="bi bi-x"></i></a>
                 </div>
               </div>
             </div>
             <div v-if="!show">
-              <div class="col-md-3 mb-3" v-for="item in getBlogDetail.data.images">
+              <div class="col-md-3 mb-3" v-for="item in getBlogDetail.images">
                 <div class="card">
                   <img :src="apiUrl + item.image" class="card-img-top" alt="">
                 </div>
                 <a href="javascript:void(0)" @click="deleteImage(item.id)"><i class="bi bi-x"></i></a>
               </div>
-              <h5 class="card-title">{{ getBlogDetail.data.title }}</h5>
-              <p class="card-text">{{ getBlogDetail.data.body }}</p>
-              <span>{{ getBlogDetail.data.category }}</span>
+              <h5 class="card-title">{{ getBlogDetail.title }}</h5>
+              <p class="card-text">{{ getBlogDetail.body }}</p>
+              <span>{{ getBlogDetail.category }}</span>
               <br><br>
-              <span class="keyword" v-for="keyword in getBlogDetail.data.keywords.split(',')">{{ keyword }}</span>
+              <span class="keyword" v-for="keyword in getBlogDetail.keywords.split(',')">{{ keyword }}</span>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 mt-5">
             <div class="row">
-              <div class="col-md-12" v-for="item in getBlogDetail.data.comments">
+              <div class="col-md-12" v-for="item in getBlogDetail.comments">
                 <figure class="text-center">
                   <blockquote class="blockquote">
                     <p>{{ item.comment }}</p>
@@ -149,6 +171,7 @@ export default {
   data() {
     return {
       apiUrl: "http://127.0.0.1:8000/images/",
+      defaultprofilephoto: "defaultprofilephoto.jpg",
       id: this.$route.params.id,
       show: false,
       updateComment: false,
@@ -156,7 +179,8 @@ export default {
       authUser: false,
       authUserComment: false,
       comment: "",
-      commentUpdate: ""
+      commentUpdate: "",
+      keywordError: false,
     }
   },
   validations() {
@@ -183,9 +207,9 @@ export default {
       this.uploadImages();
       let data = new FormData();
       data.append('blogId', this.id);
-      data.append('title', this.getBlogDetail.data.title);
-      data.append('body', this.getBlogDetail.data.body);
-      data.append('category', this.getBlogDetail.data.category);
+      data.append('title', this.getBlogDetail.title);
+      data.append('body', this.getBlogDetail.body);
+      data.append('category', this.getBlogDetail.category);
 
       for (let i = 0; i < this.blogImage.length; i++) {
         let image = this.blogImage [i];
@@ -235,6 +259,34 @@ export default {
       setTimeout(() => {
         this.$swal('comment deleted');
       }, 500)
+    },
+    addKeywords(event) {
+      let text = event.target
+      let matched = false
+      if (text.value.length > 0) {
+        this.getBlogDetail.keywords.split(',').forEach(keyword => {
+          if (keyword.toLowerCase() === text.value.toLowerCase()) {
+            matched = true
+          }
+        })
+        if (!matched) {
+          this.getBlogDetail.keywords.split(',').push(text.value)
+          text.value = ""
+        } else {
+          this.keywordError = true
+          setTimeout(() => {
+            this.keywordError = false
+          }, 2000)
+        }
+      }
+    },
+    removeKeyword(e) {
+      if (e.target.value.length <= 0) {
+        this.getBlogDetail.keywords.split(',').splice(this.getBlogDetail.keywords.split(',').length - 1, 1)
+      }
+    },
+    removeOneKeyword(index) {
+      this.getBlogDetail.keywords.splice(index, 1)
     }
   },
   computed: {
@@ -248,7 +300,7 @@ export default {
     ]),
     auth() {
       let autUserID = this.getAuthUser.id
-      let blogID = this.getBlogDetail.data.user_id
+      let blogID = this.getBlogDetail.user_id
       if (autUserID == blogID) {
         return this.authUser = true
       } else {
@@ -290,5 +342,33 @@ export default {
   padding: 7px;
   border-radius: 10px;
   margin-right: 5px;
+}
+
+.tag {
+  background-color: #fbbd08;
+  padding: 7px;
+  color: #000;
+  cursor: default;
+  margin-right: 5px;
+  border-radius: 10px;
+}
+
+.tag * {
+  font-size: 14px;
+}
+
+.tag .close {
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.close {
+  margin-left: 5px;
+  border-style: inset;
+  border-color: red;
+  background: red;
+  color: white;
+  border-radius: 5px;
 }
 </style>

@@ -346,7 +346,7 @@ export default createStore({
                     //     }
                     // )
                     .then(response => {
-                            let blogDetail = response
+                            let blogDetail = response.data
                             commit("setBlogDetail", blogDetail)
                             console.log(blogDetail)
                             resolve(response)
@@ -385,6 +385,36 @@ export default createStore({
                 api.post('/deleteBlog', {id: blogID},
                     token
                 )
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        favorited({commit}, blogID) {
+            return new Promise((resolve, reject) => {
+                api.post('/favorited', {id: blogID}, token)
+                    .then(response => {
+                            resolve(response)
+                            return response
+                        }
+                    )
+                    .catch(function (error) {
+                            reject(error)
+                            return error
+                        }
+                    )
+            })
+        },
+        unfavorited({commit}, blogID) {
+            return new Promise((resolve, reject) => {
+                api.post('/unfavorited', {id: blogID}, token)
                     .then(response => {
                             resolve(response)
                             return response
