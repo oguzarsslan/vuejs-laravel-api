@@ -96,7 +96,6 @@
                   <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="">
                 </div>
               </div>
-
               <h5 class="card-title">{{ getBlogDetail.title }}</h5>
               <p class="card-text">{{ getBlogDetail.body }}</p>
               <span>{{ getBlogDetail.category }}</span>
@@ -109,21 +108,21 @@
           <div class="col-md-6 mt-5">
             <div class="row">
               <div class="col-md-12" v-for="item in getBlogDetail.comments">
-                <figure class="text-center">
-                  <blockquote class="blockquote">
-                    <p>{{ item.comment }}</p>
-                  </blockquote>
-                  <figcaption class="blockquote-footer">
-                    <cite title="Source Title">{{ item.user_id }}</cite>
-                  </figcaption>
-                </figure>
-                <div>
+                <div v-if="getAuthUser.id === item.users.id">
                   <button class="btn-xs btn-danger float-end" @click="deleteComment(item.id)"><i class="bi bi-x"></i>
                   </button>
                   <button class="btn-xs btn-success float-end" @click="updateComment = !updateComment">
                     <i class="bi" :class="updateComments"></i>
                   </button>
                 </div>
+                <figure class="text-center">
+                  <blockquote class="blockquote">
+                    <p>{{ item.comment }}</p>
+                  </blockquote>
+                  <figcaption class="blockquote-footer">
+                    <cite title="Source Title">{{ item.users.name }}</cite>
+                  </figcaption>
+                </figure>
                 <div class="form-floating float-end" v-if="updateComment">
                 <textarea class="form-control commentInput"
                           id="floatingTextarea1"
@@ -136,7 +135,7 @@
                     </div>
                   </small>
                   <label for="floatingTextarea1">Comments</label>
-                  <button class="btn btn-primary mt-2 float-end" @click="upComment(item.id)">Update</button>
+                  <button class="btn btn-primary mt-2 float-end" @click="upComment(item.id,item.users.user_id)">Update</button>
                 </div>
               </div>
             </div>
@@ -247,10 +246,12 @@ export default {
       this.$store.dispatch('getBlogDetails', this.id);
       console.log(data)
     },
-    upComment(id) {
+    upComment(id,user_id) {
       let data = new FormData();
       data.append('id', id);
       data.append('comment', this.commentUpdate);
+      data.append('auth_id', this.getAuthUser.id);
+      data.append('comment_user_id', user_id);
       console.log(data)
       this.$store.dispatch('upComment', data);
       this.updateComment = false
