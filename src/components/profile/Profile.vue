@@ -61,7 +61,7 @@
                         <div class="col-md-7 mb-3">
                           <input
                               class="form-control"
-                              type="text"
+                              type="password"
                               placeholder="Password"
                               :class="{'is-invalid' : v$.password.$error}"
                               @blur="v$.password.$touch()"
@@ -75,7 +75,7 @@
                         <div class="col-md-7 mb-3">
                           <input
                               class="form-control"
-                              type="text"
+                              type="password"
                               placeholder="RePassword"
                               :class="{'is-invalid' : v$.repassword.$error}"
                               @blur="v$.repassword.$touch()"
@@ -89,7 +89,9 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-success" @click="updatePassword()" data-bs-dismiss="modal">Update</button>
+                        <button type="button" class="btn btn-success" @click="updatePassword()" data-bs-dismiss="modal">
+                          Update
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -105,7 +107,8 @@
                   <img :src="apiUrl + getAuthUser.images[0].image" class="card-img-top" alt=""
                        v-if="getAuthUser.images[0]">
                   <img :src="apiUrl + defaultprofilephoto" class="card-img-top" alt="" v-else>
-                  <a href="javascript:void(0)" @click="deleteProfilePhoto()" v-if="getAuthUser.images[0]"><i class="bi bi-x"></i></a>
+                  <a href="javascript:void(0)" @click="deleteProfilePhoto()" v-if="getAuthUser.images[0]"><i
+                      class="bi bi-x"></i></a>
                 </div>
                 <div class="col-md-3 mb-3">
                   <button class="btn btn-success text-right" @click="updateUser()">Update</button>
@@ -198,7 +201,7 @@ export default {
       this.$store.dispatch('updateUser', data)
       this.getUser();
     },
-    updatePassword(){
+    updatePassword() {
       let data = new FormData();
       data.append('password', this.password)
       data.append('repassword', this.repassword)
@@ -212,7 +215,7 @@ export default {
         }, 500)
       })
     },
-    deleteProfilePhoto(){
+    deleteProfilePhoto() {
       this.$store.dispatch('deleteProfilePhoto').then(response => {
         console.log(response)
         setTimeout(() => {
@@ -237,5 +240,9 @@ export default {
 <style scoped>
 .btn {
   float: right;
+}
+
+.card-img-top {
+  width: 50%;
 }
 </style>
