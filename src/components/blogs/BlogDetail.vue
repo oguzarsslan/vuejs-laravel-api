@@ -135,7 +135,8 @@
                     </div>
                   </small>
                   <label for="floatingTextarea1">Comments</label>
-                  <button class="btn btn-primary mt-2 float-end" @click="upComment(item.id,item.users.user_id)">Update</button>
+                  <button class="btn btn-primary mt-2 float-end" @click="upComment(item.id,item.users.user_id)">Update
+                  </button>
                 </div>
               </div>
             </div>
@@ -212,6 +213,7 @@ export default {
       this.uploadImages();
       let data = new FormData();
       data.append('blogId', this.id);
+      data.append('user_id', this.getBlogDetail.user_id);
       data.append('title', this.getBlogDetail.title);
       data.append('body', this.getBlogDetail.body);
       data.append('category', this.getBlogDetail.category);
@@ -246,11 +248,10 @@ export default {
       this.$store.dispatch('getBlogDetails', this.id);
       console.log(data)
     },
-    upComment(id,user_id) {
+    upComment(id, user_id) {
       let data = new FormData();
       data.append('id', id);
       data.append('comment', this.commentUpdate);
-      data.append('auth_id', this.getAuthUser.id);
       data.append('comment_user_id', user_id);
       console.log(data)
       this.$store.dispatch('upComment', data);
