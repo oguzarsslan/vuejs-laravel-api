@@ -104,9 +104,10 @@ export default {
         this.$store.dispatch('loginUser', this.user).then(response => {
           router.push("/")
           this.$store.state.message = ""
-          setTimeout(() => {
-            location.reload();
-          }, 1000)
+
+          // setTimeout(() => {
+          //   location.reload();
+          // }, 1000)
         }).catch(function (error) {
           setTimeout(() => {
             router.push("/login")

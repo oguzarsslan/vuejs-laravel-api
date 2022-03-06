@@ -3,17 +3,12 @@ import api from "../api";
 import axios from "axios";
 import router from "../router";
 
-let token = {
-    headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    }
-}
 
 export default createStore({
     state: {
         item: "",
         user: {},
-        token: "",
+        token: localStorage.getItem("token"),
         message: "",
         authUser: "",
         blogs: "",
@@ -32,7 +27,7 @@ export default createStore({
             return state.token
         },
         isAuth(state) {
-            return state.token !== ""
+            return state.token != null
         },
         getMessage(state) {
             return state.message
@@ -114,7 +109,7 @@ export default createStore({
         },
         getDataFromServer({commit}) {
             return new Promise((resolve) => {
-                api.get('/get', token)
+                api.get('/get')
                     .then(response => {
                             commit('setData', response.data)
                             console.log(response)
@@ -152,8 +147,7 @@ export default createStore({
                 //     }
                 // )
                 //     let param = {id: userid};
-                api.post('/delete', {id: userid},
-                    token
+                api.post('/delete', {id: userid}
                 )
                     .then(response => {
                             resolve(response)
@@ -184,34 +178,32 @@ export default createStore({
                 api.post('/login', param)
                     .then(response => {
                             console.log(response.data.access_token)
+                            console.log(response)
                             commit('setToken', response.data.access_token)
                             localStorage.setItem("token", response.data.access_token)
                             localStorage.setItem("expirationDate", new Date().getTime() + 3600000)
-                            api.init();
+                            api.setHeader();
                             dispatch('setTimeoutTimer', 3600000)
                             resolve(response)
-                            return response
                         }
                     )
                     .catch(function (error) {
                             commit('setMessage', error)
                             console.log(error)
                             reject(error)
-                            return error
                         }
                     )
             })
         },
-        logoutUser() {
+        logoutUser({state}) {
             return new Promise((resolve, reject) => {
-                api.get('/logout', token)
+                api.get('/logout')
                     .then(response => {
                             localStorage.removeItem("token")
                             localStorage.removeItem("expirationDate")
+                            state.token = null
+                            console.log(localStorage.getItem('token'), state)
                             resolve(response)
-                            console.log(localStorage.getItem('token'))
-                            router.replace("/login")
-                            return response
                         }
                     )
                     .catch(function (error) {
@@ -229,7 +221,7 @@ export default createStore({
         getUser({commit}) {
             return new Promise((resolve, reject) => {
                 // api.post('/getUser')
-                axios.get('http://127.0.0.1:8000/getUser', token)
+                axios.get('http://127.0.0.1:8000/getUser')
                     .then(response => {
                             let user = response.data[0]
                             commit("setAuthUser", user)
@@ -246,7 +238,7 @@ export default createStore({
         },
         deleteProfilePhoto({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/deleteProfilePhoto', token)
+                api.get('/deleteProfilePhoto')
                     .then(response => {
                             resolve(response)
                             return response
@@ -261,12 +253,7 @@ export default createStore({
         },
         updateUser({commit}, user) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/updateUser', user, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    }
-                })
+                axios.post('http://127.0.0.1:8000/updateUser', user)
                     .then(response => {
                             resolve(response)
                             return response
@@ -282,7 +269,7 @@ export default createStore({
         },
         updatePassword({commit}, password) {
             return new Promise((resolve, reject) => {
-                api.post('/updatePassword', password, token)
+                api.post('/updatePassword', password)
                     .then(response => {
                             resolve(response)
                             return response
@@ -298,12 +285,7 @@ export default createStore({
         },
         setBlog({commit}, data) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/storeBlog', data, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        }
-                    }
+                axios.post('http://127.0.0.1:8000/storeBlog', data
                 )
                     .then(response => {
                             console.log(response.data)
@@ -321,7 +303,7 @@ export default createStore({
         },
         getBlogs({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/getBlogs', token)
+                api.get('/getBlogs')
                     .then(response => {
                             let blogs = response.data
                             commit("setBlogs", blogs)
@@ -338,7 +320,7 @@ export default createStore({
         },
         getBlogDetails({commit}, id) {
             return new Promise((resolve, reject) => {
-                api.get('/getBlog/' + id, token)
+                api.get('/getBlog/' + id)
                     // axios.get('http://127.0.0.1:8000/getBlog/' + id, {
                     //         headers: {
                     //             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -361,12 +343,7 @@ export default createStore({
         },
         updateBlog({commit}, blog) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/updateBlog', blog, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    }
-                })
+                axios.post('http://127.0.0.1:8000/updateBlog', blog)
                     .then(response => {
                             resolve(response)
                             return response
@@ -382,8 +359,7 @@ export default createStore({
         },
         deleteBlog({commit}, blogID) {
             return new Promise((resolve, reject) => {
-                api.post('/deleteBlog', {id: blogID},
-                    token
+                api.post('/deleteBlog', {id: blogID}
                 )
                     .then(response => {
                             resolve(response)
@@ -399,7 +375,7 @@ export default createStore({
         },
         favorited({commit}, blogID) {
             return new Promise((resolve, reject) => {
-                api.post('/favorited', {id: blogID}, token)
+                api.post('/favorited', {id: blogID})
                     .then(response => {
                             resolve(response)
                             return response
@@ -414,7 +390,7 @@ export default createStore({
         },
         unfavorited({commit}, blogID) {
             return new Promise((resolve, reject) => {
-                api.post('/unfavorited', {id: blogID}, token)
+                api.post('/unfavorited', {id: blogID})
                     .then(response => {
                             resolve(response)
                             return response
@@ -429,8 +405,7 @@ export default createStore({
         },
         deleteImage({commit}, imageID) {
             return new Promise((resolve, reject) => {
-                api.post('/deleteImage', {id: imageID},
-                    token
+                api.post('/deleteImage', {id: imageID}
                 )
                     .then(response => {
                             resolve(response)
@@ -446,7 +421,7 @@ export default createStore({
         },
         getFriends({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/getFriends', token)
+                api.get('/getFriends')
                     // axios.get('http://127.0.0.1:8000/getFriends', {
                     //         headers: {
                     //             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -469,7 +444,7 @@ export default createStore({
         },
         removeFriend({commit}, userid) {
             return new Promise((resolve, reject) => {
-                api.post('/removeFriend', {id: userid}, token)
+                api.post('/removeFriend', {id: userid})
                     .then(response => {
                             resolve(response)
                             return response
@@ -484,7 +459,7 @@ export default createStore({
         },
         getFriendRequests({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/getRequest', token)
+                api.get('/getRequest')
                     .then(response => {
                             let Friends = response.data
                             commit("setFriendRequest", Friends)
@@ -501,7 +476,7 @@ export default createStore({
         },
         addFriends({commit}, userid) {
             return new Promise((resolve, reject) => {
-                api.post('/acceptFriend', {id: userid}, token)
+                api.post('/acceptFriend', {id: userid})
                     .then(response => {
                             resolve(response)
                             return response
@@ -516,7 +491,7 @@ export default createStore({
         },
         sendRequest({commit}, userid) {
             return new Promise((resolve, reject) => {
-                api.post('/addFriend', {id: userid}, token)
+                api.post('/addFriend', {id: userid})
                     .then(response => {
                             resolve(response)
                             return response
@@ -531,7 +506,7 @@ export default createStore({
         },
         getFriendsSent({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/getSent', token)
+                api.get('/getSent')
                     .then(response => {
                             let Friends = response.data
                             commit("setFriendSent", Friends)
@@ -548,7 +523,7 @@ export default createStore({
         },
         getBlockeds({commit}) {
             return new Promise((resolve, reject) => {
-                api.get('/getBlocked', token)
+                api.get('/getBlocked')
                     .then(response => {
                             let Friends = response.data
                             commit("setBlocked", Friends)
@@ -565,7 +540,7 @@ export default createStore({
         },
         blocked({commit}, userid) {
             return new Promise((resolve, reject) => {
-                api.post('/blockFriend', {id: userid}, token)
+                api.post('/blockFriend', {id: userid})
                     .then(response => {
                             resolve(response)
                             return response
@@ -580,7 +555,7 @@ export default createStore({
         },
         unblocked({commit}, userid) {
             return new Promise((resolve, reject) => {
-                api.post('/unblockFriend', {id: userid}, token)
+                api.post('/unblockFriend', {id: userid})
                     .then(response => {
                             resolve(response)
                             return response
@@ -595,12 +570,7 @@ export default createStore({
         },
         setComment({commit}, data) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/setComment', data, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    }
-                })
+                axios.post('http://127.0.0.1:8000/setComment', data)
                     .then(response => {
                             console.log(response.data)
                             resolve(response)
@@ -617,12 +587,7 @@ export default createStore({
         },
         upComment({commit}, data) {
             return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/upComment', data, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    }
-                })
+                axios.post('http://127.0.0.1:8000/upComment', data)
                     .then(response => {
                             console.log(response.data)
                             resolve(response)
@@ -639,7 +604,7 @@ export default createStore({
         },
         deleteComment({commit}, userid) {
             return new Promise((resolve, reject) => {
-                api.post('/deleteComment', {id: userid}, token)
+                api.post('/deleteComment', {id: userid})
                     .then(response => {
                             resolve(response)
                             return response

@@ -111,9 +111,9 @@
                 <div v-if="getAuthUser.id === item.users.id">
                   <button class="btn-xs btn-danger float-end" @click="deleteComment(item.id)"><i class="bi bi-x"></i>
                   </button>
-                  <button class="btn-xs btn-success float-end" @click="updateComment = !updateComment">
-                    <i class="bi" :class="updateComments"></i>
-                  </button>
+                  <a data-toggle="collapse" role="button" aria-expanded="false" aria-controls="floatingTextarea1" href="#floatingTextarea1" class="btn-xs btn-success float-end">
+                    <i class="bi"></i>sa
+                  </a>
                 </div>
                 <figure class="text-center">
                   <blockquote class="blockquote">
@@ -123,9 +123,9 @@
                     <cite title="Source Title">{{ item.users.name }}</cite>
                   </figcaption>
                 </figure>
-                <div class="form-floating float-end" v-if="updateComment">
-                <textarea class="form-control commentInput"
-                          id="floatingTextarea1"
+                <div  id="floatingTextarea1" class="collapse form-floating float-end">
+                  <textarea class="form-control commentInput"
+
                           v-model="commentUpdate"
                           :class="{'is-invalid' : v$.commentUpdate.$error}"
                           @blur="v$.commentUpdate.$touch()"></textarea>

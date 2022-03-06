@@ -18,16 +18,16 @@
             <li class="nav-item">
               <router-link to="/users" tag="a">Users</router-link>
             </li>
-            <li class="nav-item" v-if="!show">
+            <li class="nav-item" v-if="!isAuth">
               <router-link to="/login" tag="a">Auth</router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="isAuth">
               <router-link to="/friends" tag="a">Friends</router-link>
             </li>
-            <li class="nav-item" v-if="show">
+            <li class="nav-item" v-if="isAuth">
               <router-link to="/profile" tag="a">Profile</router-link>
             </li>
-            <li class="nav-item" v-if="show">
+            <li class="nav-item" v-if="isAuth">
               <a href="#" @click.prevent="logout">Logout</a>
             </li>
           </ul>
@@ -38,6 +38,9 @@
 </template>
 
 <script>
+import router from "../router";
+import {mapGetters} from "vuex";
+
 export default {
   name: "Header",
   data() {
@@ -48,11 +51,22 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("logoutUser")
-      setTimeout(() => {
-        location.reload();
-      }, 1000)
+          .then(response => {
+                console.log("ok")
+                router.push("/login")
+                this.show = false
+              }
+          )
+      // setTimeout(() => {
+      //   location.reload();
+      // }, 1000)
 
     }
+  },
+  computed: {
+    ...mapGetters([
+      "isAuth",
+    ])
   }
 }
 </script>

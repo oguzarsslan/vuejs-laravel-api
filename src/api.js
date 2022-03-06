@@ -1,4 +1,6 @@
 import axios from 'axios'
+import store from './store'
+
 // import TokenService from './tokenservice'
 
 // const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZ1YXRjeXBAZ21haWwuY29tIiwidXNlcl9pZCI6MSwiaWF0IjoxNjI4MDIyMTMwLCJleHAiOjE2MjgxMDg1MzB9.LzGjtEx3gfy8Xp_Ea1LYT_u68IYbL2GG7Zokq0QGzro";
@@ -12,7 +14,7 @@ const ApiService = {
     },
 
     setHeader() {
-        axios.defaults.headers.common["Authorization"] = 'Bearer' + localStorage.getItem('token');
+        axios.defaults.headers.common["Authorization"] = 'Bearer ' + store.state.token;
         // axios.defaults.headers.common["ACCESS_TOKEN"] = access_token;
         axios.defaults.headers.common["API_KEY"] = api_key;
     },
